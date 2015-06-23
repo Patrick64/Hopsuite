@@ -41,6 +41,11 @@ class Hop_social_merge_helper
         return self::$_settings;
     }
 
+    /**
+     * Save Add-on settings into database
+     * @param  array  $settings [description]
+     * @return array            [description]
+     */
     public static function save_settings($settings = array())
     {
         //be sure to save all settings possible
@@ -62,6 +67,15 @@ class Hop_social_merge_helper
         self::$_settings = $_tmp_settings;
     }
 
+    /**
+     * Get the social timeline with given parameters
+     * Will load cache if exist, if not, load from social networks using APIs
+     * @param  [type] $twitter_screen_name Twitter user account to get tweets from
+     * @param  [type] $twitter_count       Number of tweets to get
+     * @param  [type] $facebook_page_id    Facebook page if to get posts from
+     * @param  [type] $facebook_count      Number of posts to get
+     * @return array                       An array containing all post/tweets, ordered by date, most recent first
+     */
     public static function _get_timeline($twitter_screen_name, $twitter_count, $facebook_page_id, $facebook_count)
     {
         $cache_key = "";
@@ -78,6 +92,7 @@ class Hop_social_merge_helper
 			//no kidding
 		}
 
+        //Parameters validation
         $get_twitter = FALSE;
         if ($twitter_screen_name != NULL && $twitter_screen_name != "")
         {
@@ -89,6 +104,7 @@ class Hop_social_merge_helper
             $get_facebook = TRUE;
         }
 
+        //Creating unique cache key for this configuration
         if ($get_twitter && $get_facebook)
         {
             $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
@@ -109,10 +125,14 @@ class Hop_social_merge_helper
 
         if ($timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
         {
+            //Cache found, return it
             return $timeline_cache;
         }
         else
         {
+            //No cache, let's use APIs !
+
+            //Add-on settings
             $settings = self::get_settings();
 
             //Our posts will be stored in there
@@ -120,6 +140,8 @@ class Hop_social_merge_helper
 
             if ($get_facebook)
             {
+                //Let's get those Facebook posts
+
                 $facebook_token = $settings['facebook_app_token'];
 
                 //Get Facebook page posts
@@ -153,28 +175,29 @@ class Hop_social_merge_helper
 
             if ($get_twitter)
             {
+                //Let's get those tweets
+
                 $twit_token             = $settings['twitter_token'];
-                $twit_token_secret         = $settings['twitter_token_secret'];
-                $twit_consumer_key         = $settings['twitter_consumer_key'];
-                $twit_consumer_secret     = $settings['twitter_consumer_secret'];
+                $twit_token_secret      = $settings['twitter_token_secret'];
+                $twit_consumer_key      = $settings['twitter_consumer_key'];
+                $twit_consumer_secret   = $settings['twitter_consumer_secret'];
 
                 //Get Twitter page posts
                 $twit_settings = array (
-                    'oauth_access_token' => $twit_token,
+                    'oauth_access_token'        => $twit_token,
                     'oauth_access_token_secret' => $twit_token_secret,
-                    'consumer_key' => $twit_consumer_key,
-                    'consumer_secret' => $twit_consumer_secret
+                    'consumer_key'              => $twit_consumer_key,
+                    'consumer_secret'           => $twit_consumer_secret
                 );
                 $params = array(
                     "screen_name"   => $twitter_screen_name,
-                    "count"         => $twitter_count,
-                    "max_id"        => "590962380651147264"
+                    "count"         => $twitter_count
                 );
                 $twitter_api = new TwitterAPIWrapper($twit_settings);
                 $json = $twitter_api->get("statuses/user_timeline.json", $params );
 
                 $data = json_decode($json);
-    // var_dump($data);
+// var_dump($data);
 
                 $timeline_twitter = array();
                 foreach ($data as $tweet)

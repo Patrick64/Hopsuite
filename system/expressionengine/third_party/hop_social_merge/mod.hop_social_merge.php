@@ -160,6 +160,7 @@ class Hop_social_merge
             'favorites_count'   => 0,
             'from'              => "",
             'profile_picture'   => "",
+            'profile_url'       => "",
             'picture'           => "",
         );
         if (array_key_exists("tweet", $post))
@@ -215,7 +216,12 @@ class Hop_social_merge
         {
             $facebook = $post['facebook'];
             $facebook_date = new DateTime($facebook->created_time);
-            $facebook_text = $facebook->message;
+            $facebook_text = "";
+            if (isset($facebook->message))
+            {
+                $facebook_text = $facebook->message;
+            }
+
             if (isset($facebook->link) && $facebook->link != "")
             {
                 $facebook_text .= " ".$facebook->link;
