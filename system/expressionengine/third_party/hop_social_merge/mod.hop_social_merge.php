@@ -187,17 +187,18 @@ class Hop_social_merge
                 }
             }
 
-            $tags['text'] = $tweet_text;
-            //$tags['text_url'] = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $tweet_text);
-            $tags['text_url'] = $tweet_text_url;
-            $tags['date'] = $tweet_date->getTimestamp();
+            $tags['text']           = $tweet_text;
+            //$tags['text_url']     = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $tweet_text);
+            $tags['text_url']       = $tweet_text_url;
+            $tags['date']           = $tweet_date->getTimestamp();
             $tags['social_network'] = "Twitter";
             $tags['retweets_count'] = $tweet->retweet_count;
-            $tags['favorites_count'] = $tweet->favorite_count;
+            $tags['favorites_count']= $tweet->favorite_count;
 
             //User data
-            $tags['from'] = $tweet->user->name;
-            $tags['profile_picture'] = $tweet->user->profile_image_url_https;
+            $tags['from']           = $tweet->user->name;
+            $tags['profile_picture']= $tweet->user->profile_image_url_https;
+            $tags['profile_url']    = 'https://twitter.com/'.$tweet->user->screen_name;
 
             if (isset($tweet->entities->media) && is_array($tweet->entities->media))
             {
@@ -226,28 +227,29 @@ class Hop_social_merge
             {
                 $facebook_text .= " ".$facebook->link;
             }
-            $tags['text'] = $facebook_text;
-            $tags['text_url'] = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $facebook_text);
-            $tags['date'] = $facebook_date->getTimestamp();
-            $tags['social_network'] = "Facebook";
+            $tags['text']               = $facebook_text;
+            $tags['text_url']           = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $facebook_text);
+            $tags['date']               = $facebook_date->getTimestamp();
+            $tags['social_network']     = "Facebook";
             if (isset($facebook->shares))
             {
-                $tags['shares_count'] = $facebook->shares->count;
+                $tags['shares_count']   = $facebook->shares->count;
             }
 
-            $tags['likes_count'] = $facebook->likes->summary->total_count;
-            $tags['comments_count'] = $facebook->comments->summary->total_count;
+            $tags['likes_count']        = $facebook->likes->summary->total_count;
+            $tags['comments_count']     = $facebook->comments->summary->total_count;
 
             //User data
-            $tags['from'] = $facebook->from->name;
+            $tags['from']               = $facebook->from->name;
             //We don't have that in Facebook data...
-            //$tags['profile_picture'] = $facebook->from->
-            $tags['profile_picture'] = '';
+            //$tags['profile_picture']  = $facebook->from->
+            $tags['profile_picture']    = '';
+            $tags['profile_url']        = 'https://www.facebook.com/'.$facebook->from->id;
 
             //Media attached
             if (isset($facebook->picture))
             {
-                $tags['picture'] = $facebook->picture;
+                $tags['picture']        = $facebook->picture;
             }
         }
 
