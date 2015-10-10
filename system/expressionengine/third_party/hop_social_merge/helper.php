@@ -76,7 +76,7 @@ class Hop_social_merge_helper
      * @param  [type] $facebook_count      Number of posts to get
      * @return array                       An array containing all post/tweets, ordered by date, most recent first
      */
-    public static function _get_timeline($twitter_screen_name, $twitter_count, $facebook_page_id, $facebook_count)
+    public static function _get_timeline($twitter_screen_name, $twitter_hashtags, $twitter_count, $facebook_page_id, $facebook_count)
     {
         $cache_key = "";
 
@@ -94,7 +94,7 @@ class Hop_social_merge_helper
 
         //Parameters validation
         $get_twitter = FALSE;
-        if ($twitter_screen_name != NULL && $twitter_screen_name != "")
+        if (($twitter_screen_name != NULL && $twitter_screen_name != "") || ($twitter_hashtags != NULL && $twitter_hashtags != ""))
         {
             $get_twitter = TRUE;
         }
@@ -105,9 +105,17 @@ class Hop_social_merge_helper
         }
 
         //Creating unique cache key for this configuration
+        // TODO: Improve chaching naming (use md5 on settings for instance)
         if ($get_twitter && $get_facebook)
         {
-            $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
+            if ($twitter_screen_name != NULL && $twitter_screen_name != "")
+            {
+                $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
+            }
+            else 
+            {
+                $cache_key = "twitter_".$twitter_hashtags."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
+            }
         }
         else if ($get_facebook)
         {
@@ -115,7 +123,15 @@ class Hop_social_merge_helper
         }
         else if ($get_twitter)
         {
-            $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count;
+            if ($twitter_screen_name != NULL && $twitter_screen_name != "")
+            {
+                $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count;
+            }
+            else
+            {
+                $cache_key = "twitter_".$twitter_hashtags."_".$twitter_count;
+            }
+            
         }
         else
         {
@@ -189,12 +205,30 @@ class Hop_social_merge_helper
                     'consumer_key'              => $twit_consumer_key,
                     'consumer_secret'           => $twit_consumer_secret
                 );
-                $params = array(
-                    "screen_name"   => $twitter_screen_name,
-                    "count"         => $twitter_count
-                );
-                $twitter_api = new TwitterAPIWrapper($twit_settings);
-                $json = $twitter_api->get("statuses/user_timeline.json", $params );
+                
+                if ($twitter_screen_name != NULL && $twitter_screen_name != "")
+                {
+                    $params = array(
+                        "screen_name"   => $twitter_screen_name,
+                        "count"         => $twitter_count
+                    );
+                    
+                    $twitter_api = new TwitterAPIWrapper($twit_settings);
+                    $json = $twitter_api->get("statuses/user_timeline.json", $params );
+                }
+                else
+                {
+                    // TODO : process HASHTAGS before sending query
+                    $params = array(
+                        "q"         => $twitter_hashtags,
+                        "count"     => $twitter_count
+                    );
+                    
+                    $twitter_api = new TwitterAPIWrapper($twit_settings);
+                    $json = $twitter_api->get("statuses/user_timeline.json", $params );
+                }
+                
+                
 
                 $data = json_decode($json);
 // var_dump($data);
