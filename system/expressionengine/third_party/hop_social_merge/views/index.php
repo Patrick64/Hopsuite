@@ -2,11 +2,13 @@
 <h2>How to use ?</h2>
 <h3>Single tag</h3>
 <p>The simple tag will display a list of social posts.</p>
-<pre>{exp:hop_social_merge:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}</pre>
-<p>In order to get facebook posts and tweets, the <i>twitter_username</i> parameter and <i>facebook_feed_id</i> parameter are mandatory.</p>
+<pre style="background-color: #fff; color: #111; padding: 10px;">
+{exp:hop_social_merge:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}
+</pre>
+<p>In order to get facebook posts and tweets, the <u><i>twitter_username</i> or <i>twitter_search_query</i> parameter</u> and <u><i>facebook_feed_id</i></u> parameter are mandatory.</p>
 <h3>Tag Pair</h3>
 <p>The tag pair will iterate through each social post and display them using template tags. Here is a simple example :</p>
-<pre>
+<pre style="background-color: #fff; color: #111; padding: 10px;">
 {exp:hop_social_merge:timeline twitter_username="hopstudios" facebook_feed_id="6308437182"}
     &lt;p&gt;{text_url}&lt;/p&gt;
     &lt;p&gt;{date format=&quot;%Y-%m-%d %H:%i:%s&quot;}&lt;/p&gt;
@@ -19,8 +21,25 @@
     &lt;hr&gt;
 {/exp:hop_social_merge:timeline}
 </pre>
-<p>In order to get facebook posts and tweets, the <i>twitter_username</i> parameter and <i>facebook_feed_id</i> parameter are mandatory.</p>
-<h4>Available Tags</h4>
+
+<h3>Parameters</h3>
+<p>Those parameters are available for both single tag and tag pair</p>
+<p><strong>twitter_username</strong><br/>
+This will retrieve tweets from the given user timeline You can't use both twitter_username and twitter_search_query in the same tag.</p>
+<p><strong>twitter_search_query</strong><br/>
+This will search for tweets. Take a look at the <a href="https://twitter.com/search-home">official twitter search page</a> to have a deeper look on how it works (operators and advanced queries). You can't use both twitter_username and twitter_search_query in the same tag.</p>
+<p><strong>facebook_feed_id</strong><br/>
+Feed id of the person or page you want to retrieve posts from. To get a facebook feed id from a name, use the form at the bottom of that page.</p>
+<p><strong>total_count="10"</strong><br/>
+Specify how much posts in total will be displayed. If facebook_count and twitter_count are specified, this will not be taken into account.</p>
+<p><strong>facebook_count="5"</strong><br/>
+Specify how much Facebook posts will be displayed.</p>
+<p><strong>twitter_count="5"</strong><br/>
+Specify how much tweets will be displayed.</p>
+
+<h3>Available Tags</h3>
+<p>Only when using the tag pair, obviously.</p>
+
 <p><strong>{count}</strong><br/>
 Display the current count of the post (with no distinction between Twitter or Facebook)</p>
 
@@ -69,14 +88,6 @@ This will display the post with the url parsed</p>
 <p><strong>{total_results}</strong><br/>
 Display the total number of social posts.</p>
 
-<h3>Parameters</h3>
-<p>Those parameters are available for both single tag and tag pair</p>
-<p><strong>total_count="10"</strong><br/>
-Specify how much posts in total will be displayed. If facebook_count and twitter_count are specified, this will not be taken into account.</p>
-<p><strong>facebook_count="5"</strong><br/>
-Specify how much Facebook posts will be displayed.</p>
-<p><strong>twitter_count="5"</strong><br/>
-Specify how much tweets will be displayed.</p>
 <h2>Get Facebook feed id</h2>
 <p>To get your feed id, enter the short name of the page or username of a user and submit. The short name can be found in the page/user profile URL (https://www.facebook.com/hopstudios, short name is "hopstudios").</p>
 <form id="facebook_page_name_get" action="#" method="get">
