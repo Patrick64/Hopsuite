@@ -71,12 +71,13 @@ class Hop_social_merge_helper
      * Get the social timeline with given parameters
      * Will load cache if exist, if not, load from social networks using APIs
      * @param  [type] $twitter_screen_name Twitter user account to get tweets from
+     * @param  [type] $twitter_search_query Search query (if no screenname set, used for hashtags and whatnot...)
      * @param  [type] $twitter_count       Number of tweets to get
      * @param  [type] $facebook_page_id    Facebook page if to get posts from
      * @param  [type] $facebook_count      Number of posts to get
      * @return array                       An array containing all post/tweets, ordered by date, most recent first
      */
-    public static function _get_timeline($twitter_screen_name, $twitter_hashtags, $twitter_count, $facebook_page_id, $facebook_count)
+    public static function _get_timeline($twitter_screen_name, $twitter_search_query, $twitter_count, $facebook_page_id, $facebook_count)
     {
         $cache_key = "";
 
@@ -94,7 +95,7 @@ class Hop_social_merge_helper
 
         //Parameters validation
         $get_twitter = FALSE;
-        if (($twitter_screen_name != NULL && $twitter_screen_name != "") || ($twitter_hashtags != NULL && $twitter_hashtags != ""))
+        if (($twitter_screen_name != NULL && $twitter_screen_name != "") || ($twitter_search_query != NULL && $twitter_search_query != ""))
         {
             $get_twitter = TRUE;
         }
@@ -114,7 +115,7 @@ class Hop_social_merge_helper
             }
             else 
             {
-                $cache_key = "twitter_".$twitter_hashtags."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
+                $cache_key = "twitter_".$twitter_search_query."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
             }
         }
         else if ($get_facebook)
@@ -129,7 +130,7 @@ class Hop_social_merge_helper
             }
             else
             {
-                $cache_key = "twitter_".$twitter_hashtags."_".$twitter_count;
+                $cache_key = "twitter_".$twitter_search_query."_".$twitter_count;
             }
             
         }
@@ -139,7 +140,8 @@ class Hop_social_merge_helper
             return "";
         }
 
-        if ($timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
+        // TODO : use cache
+        if (FALSE && $timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
         {
             //Cache found, return it
             return $timeline_cache;
@@ -215,22 +217,28 @@ class Hop_social_merge_helper
                     
                     $twitter_api = new TwitterAPIWrapper($twit_settings);
                     $json = $twitter_api->get("statuses/user_timeline.json", $params );
+                    // print_r($json);
+
+                    // Data is an array of Tweets
+                    $data = json_decode($json);
                 }
                 else
                 {
-                    // TODO : process HASHTAGS before sending query
                     $params = array(
-                        "q"         => $twitter_hashtags,
-                        "count"     => $twitter_count
+                        "q"         => $twitter_search_query,
+                        "count"     => $twitter_count,
+                        "result_type" => 'recent'
                     );
                     
                     $twitter_api = new TwitterAPIWrapper($twit_settings);
-                    $json = $twitter_api->get("statuses/user_timeline.json", $params );
+                    $json = $twitter_api->get("search/tweets.json", $params );
+                    // print_r($json);
+                    
+                    // Adjustement to get an array of tweets
+                    $data = json_decode($json);
+                    $data = $data->statuses;
                 }
                 
-                
-
-                $data = json_decode($json);
 // var_dump($data);
 
                 $timeline_twitter = array();

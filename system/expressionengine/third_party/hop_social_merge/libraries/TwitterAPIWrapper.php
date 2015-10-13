@@ -77,6 +77,8 @@ class TwitterAPIWrapper {
 
         // this time we're using a normal GET query, and we're only encoding the query params
         // (without the oauth params)
+        // (we need to decode the query because it has been encoded before)
+        $query = array_map("urldecode", $query);
         $url .= "?".http_build_query($query);
 
         $oauth['oauth_signature'] = $signature; // don't want to abandon all that work!
@@ -95,7 +97,7 @@ class TwitterAPIWrapper {
 
         // if you're doing post, you need to skip the GET building above
         // and instead supply query parameters to CURLOPT_POSTFIELDS
-        $options = array( CURLOPT_HTTPHEADER => array("Authorization: $auth"),
+        $options = array( CURLOPT_HTTPHEADER => array("Authorization: $auth", "Content-Type: application/x-www-form-urlencoded"),
                           //CURLOPT_POSTFIELDS => $postfields,
                           CURLOPT_HEADER => false,
                           CURLOPT_URL => $url,

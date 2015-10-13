@@ -8,6 +8,7 @@ class Hop_social_merge
 
     private $facebook_page_id;
     private $twitter_username;
+    private $twitter_search_query;
     private $twitter_count;
     private $facebook_count;
 
@@ -19,7 +20,7 @@ class Hop_social_merge
     {
         $this->_process_parameters();
 
-        $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, "", $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
+        $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, $this->twitter_search_query, $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
 
         $tag_data = '<li>{text_url} - <span class="post_date">{social_network} on {date format="%Y-%m-%d %H:%i:%s"}</span></li>';
 
@@ -46,6 +47,7 @@ class Hop_social_merge
     private function _process_parameters()
     {
         $this->twitter_screen_name = ee()->TMPL->fetch_param('twitter_username');
+        $this->twitter_search_query = ee()->TMPL->fetch_param('twitter_search_query');
         $this->facebook_page_id = ee()->TMPL->fetch_param('facebook_feed_id');
         $this->_set_counts();
     }
