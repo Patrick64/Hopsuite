@@ -104,44 +104,16 @@ class Hop_social_merge_helper
         {
             $get_facebook = TRUE;
         }
-
-        //Creating unique cache key for this configuration
-        // TODO: Improve chaching naming (use md5 on settings for instance)
-        if ($get_twitter && $get_facebook)
+        
+        if (!$get_facebook && !$get_twitter)
         {
-            if ($twitter_screen_name != NULL && $twitter_screen_name != "")
-            {
-                $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
-            }
-            else 
-            {
-                $cache_key = "twitter_".$twitter_search_query."_".$twitter_count."_facebook_".$facebook_page_id."_".$facebook_count;
-            }
-        }
-        else if ($get_facebook)
-        {
-            $cache_key = "facebook_".$facebook_page_id."_".$facebook_count;
-        }
-        else if ($get_twitter)
-        {
-            if ($twitter_screen_name != NULL && $twitter_screen_name != "")
-            {
-                $cache_key = "twitter_".$twitter_screen_name."_".$twitter_count;
-            }
-            else
-            {
-                $cache_key = "twitter_".$twitter_search_query."_".$twitter_count;
-            }
-            
-        }
-        else
-        {
-            //twitter and facebook are false, exiting...
             return "";
         }
 
-        // TODO : use cache
-        if (FALSE && $timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
+        //Creating unique cache key for this configuration
+        $cache_key = md5(serialize(func_get_args()));
+
+        if ($timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
         {
             //Cache found, return it
             return $timeline_cache;
@@ -149,7 +121,7 @@ class Hop_social_merge_helper
         else
         {
             //No cache, let's use APIs !
-
+            
             //Add-on settings
             $settings = self::get_settings();
 
@@ -208,6 +180,7 @@ class Hop_social_merge_helper
                     'consumer_secret'           => $twit_consumer_secret
                 );
                 
+                // Query to get user timeline
                 if ($twitter_screen_name != NULL && $twitter_screen_name != "")
                 {
                     $params = array(
@@ -222,6 +195,7 @@ class Hop_social_merge_helper
                     // Data is an array of Tweets
                     $data = json_decode($json);
                 }
+                //Query to search for tweets
                 else
                 {
                     $params = array(
@@ -290,7 +264,7 @@ class Hop_social_merge_helper
 
 // var_dump($timeline);
 
-            //Our timeline is ready
+            //Our timeline is ready, save it in cache 
             if (isset(ee()->cache))
             {
                 ee()->cache->save('/'.__CLASS__.'/'.$cache_key, $timeline, $settings['cache_ttl']*60);
