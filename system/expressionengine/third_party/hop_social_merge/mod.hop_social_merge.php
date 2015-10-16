@@ -163,6 +163,7 @@ class Hop_social_merge
             'retweets_count'    => 0,
             'favorites_count'   => 0,
             'from'              => "",
+            'username'          => "",
             'profile_picture'   => "",
             'profile_url'       => "",
             'picture'           => "",
@@ -201,6 +202,7 @@ class Hop_social_merge
 
             //User data
             $tags['from']           = $tweet->user->name;
+            $tags['username']       = $tweet->user->screen_name;
             $tags['profile_picture']= $tweet->user->profile_image_url_https;
             $tags['profile_url']    = 'https://twitter.com/'.$tweet->user->screen_name;
 

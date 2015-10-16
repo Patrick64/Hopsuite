@@ -239,7 +239,6 @@ class Hop_social_merge_helper
                       $tweet_timeline = array(
                           'timestamp' => $date_tweet->getTimestamp(),
                           'tweet'     => $tweet
-                          //'tweet'     => ''
                       );
                       $timeline_twitter[] = $tweet_timeline;
                   }
