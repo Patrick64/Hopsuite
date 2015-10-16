@@ -39,7 +39,7 @@ class Hop_social_merge
         ee()->load->library('logger');
         $this->_process_parameters();
 
-        $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, "", $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
+        $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, $this->twitter_search_query, $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
 
         $this->return_data = $this->_process_tag_pair($timeline);
 
