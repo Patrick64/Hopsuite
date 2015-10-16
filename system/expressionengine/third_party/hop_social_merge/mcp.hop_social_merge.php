@@ -4,6 +4,12 @@ require_once PATH_THIRD.'hop_social_merge/helper.php';
 
 class hop_social_merge_mcp
 {
+  
+    function __construct()
+    {
+        ee()->load->library('logger');
+    }
+  
     /**
      * Build the navigation menu for the module
     */

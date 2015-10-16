@@ -18,6 +18,7 @@ class Hop_social_merge
      */
     function simple()
     {
+        ee()->load->library('logger');
         $this->_process_parameters();
 
         $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, $this->twitter_search_query, $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
@@ -35,6 +36,7 @@ class Hop_social_merge
      */
     function timeline()
     {
+        ee()->load->library('logger');
         $this->_process_parameters();
 
         $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, "", $this->twitter_count, $this->facebook_page_id, $this->facebook_count);

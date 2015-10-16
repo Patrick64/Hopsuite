@@ -194,6 +194,12 @@ class Hop_social_merge_helper
 
                     // Data is an array of Tweets
                     $data = json_decode($json);
+                    
+                    if (isset($data->errors))
+                    {
+                      ee()->logger->developer('Hop Social Merge error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+                      $data = null;
+                    }
                 }
                 //Query to search for tweets
                 else
@@ -210,21 +216,33 @@ class Hop_social_merge_helper
                     
                     // Adjustement to get an array of tweets
                     $data = json_decode($json);
-                    $data = $data->statuses;
+                    if (isset($data->errors))
+                    {
+                      ee()->logger->developer('Hop Social Merge error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+                      $data = null;
+                    }
+                    else
+                    {
+                      $data = $data->statuses;
+                    }
+                    
                 }
                 
 // var_dump($data);
 
                 $timeline_twitter = array();
-                foreach ($data as $tweet)
+                if ($data != null)
                 {
-                    $date_tweet = new DateTime($tweet->created_at);
-                    $tweet_timeline = array(
-                        'timestamp' => $date_tweet->getTimestamp(),
-                        'tweet'     => $tweet
-                        //'tweet'     => ''
-                    );
-                    $timeline_twitter[] = $tweet_timeline;
+                  foreach ($data as $tweet)
+                  {
+                      $date_tweet = new DateTime($tweet->created_at);
+                      $tweet_timeline = array(
+                          'timestamp' => $date_tweet->getTimestamp(),
+                          'tweet'     => $tweet
+                          //'tweet'     => ''
+                      );
+                      $timeline_twitter[] = $tweet_timeline;
+                  }
                 }
             }
 
