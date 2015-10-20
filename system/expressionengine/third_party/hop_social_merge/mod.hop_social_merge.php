@@ -167,6 +167,10 @@ class Hop_social_merge
             'profile_picture'   => "",
             'profile_url'       => "",
             'picture'           => "",
+            // Specific Twitter variables
+            'retweet_url'       => "",
+            'favorite_url'      => "",
+            'reply_url'         => "",
         );
         if (array_key_exists("tweet", $post))
         {
@@ -199,6 +203,10 @@ class Hop_social_merge
             $tags['social_network'] = "Twitter";
             $tags['retweets_count'] = $tweet->retweet_count;
             $tags['favorites_count']= $tweet->favorite_count;
+            
+            $tags['retweet_url']    = 'https://twitter.com/intent/retweet?tweet_id='.$tweet->id;
+            $tags['favorite_url']   = 'https://twitter.com/intent/favorite?tweet_id='.$tweet->id;
+            $tags['reply_url']      = 'https://twitter.com/intent/tweet?in_reply_to='.$tweet->id;
 
             //User data
             $tags['from']           = $tweet->user->name;

@@ -5,6 +5,10 @@
 <pre style="background-color: #fff; color: #111; padding: 10px;">
 {exp:hop_social_merge:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}
 </pre>
+<p>Or</p>
+<pre style="background-color: #fff; color: #111; padding: 10px;">
+{exp:hop_social_merge:simple twitter_search_query="#eecms" facebook_feed_id="6308437182"}
+</pre>
 <p>In order to get facebook posts and tweets, the <u><i>twitter_username</i> or <i>twitter_search_query</i> parameter</u> and <u><i>facebook_feed_id</i></u> parameter are mandatory.</p>
 <h3>Tag Pair</h3>
 <p>The tag pair will iterate through each social post and display them using template tags. Here is a simple example :</p>
@@ -55,6 +59,9 @@ Date of the social post. You can use <i>format="%Y-%m-%d"</i> parameter to speci
 <p><strong>{favorites_count}</strong><br/>
 <i>Twitter only</i> This will display the number of time the tweet has been saved as favorite</p>
 
+<p><strong>{favorite_url}</strong><br/>
+<i>Twitter only</i> This will output an intent url to favourite the tweet (see <a href="https://dev.twitter.com/web/intents">https://dev.twitter.com/web/intents</a>)</p>
+
 <p><strong>{from}</strong><br/>
 This will display the username of the person/page that sent the social post</p>
 
@@ -67,8 +74,14 @@ This is a url to an image if any is provided in the post.<p>
 <p><strong>{profile_picture}</strong><br/>
 <i>Twitter only</i> This is a url of the Twitter avatar of the person who posted the tweet.</p>
 
+<p><strong>{reply_url}</strong><br/>
+<i>Twitter only</i> This will output an intent url to reply to the tweet (see <a href="https://dev.twitter.com/web/intents">https://dev.twitter.com/web/intents</a>)</p>
+
 <p><strong>{retweets_count}</strong><br/>
 <i>Twitter only</i> This will display the number of times the tweet has been retweeted</p>
+
+<p><strong>{retweet_url}</strong><br/>
+<i>Twitter only</i> This will output an intent url to retweet the tweet (see <a href="https://dev.twitter.com/web/intents">https://dev.twitter.com/web/intents</a>)</p>
 
 <p><strong>{shares_count}</strong><br/>
 <i>Facebook only</i> This will display the number of times the Facebook post has been shared</p>
