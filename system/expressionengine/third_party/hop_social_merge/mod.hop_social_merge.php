@@ -25,7 +25,14 @@ class Hop_social_merge
 
         $tag_data = '<li>{text_url} - <span class="post_date">{social_network} on {date format="%Y-%m-%d %H:%i:%s"}</span></li>';
 
-        $this->return_data = '<ul>'.$this->_process_tag_pair($timeline, $tag_data).'</ul>';
+        if ($timeline != null && count($timeline) != 0)
+        {
+            $this->return_data = '<ul>'.$this->_process_tag_pair($timeline, $tag_data).'</ul>';
+        }
+        else
+        {
+            $this->return_data = "";
+        }
 
         return $this->return_data;
     }
@@ -41,7 +48,14 @@ class Hop_social_merge
 
         $timeline = Hop_social_merge_helper::_get_timeline($this->twitter_screen_name, $this->twitter_search_query, $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
 
-        $this->return_data = $this->_process_tag_pair($timeline);
+        if ($timeline != null && count($timeline) != 0)
+        {
+            $this->return_data = $this->_process_tag_pair($timeline);
+        }
+        else
+        {
+            $this->return_data = "";
+        }
 
         return $this->return_data;
     }
