@@ -189,57 +189,61 @@ class Hop_social_merge
         if (array_key_exists("tweet", $post))
         {
             $tweet = $post["tweet"];
-            $tweet_date = new DateTime($tweet->created_at);
+			// Avoid error if tweet data isn't correct
+            if (isset($tweet->created_at) && isset($tweet->text))
+            {
+                $tweet_date = new DateTime($tweet->created_at);
 
-            //Replace shortened urls to full ones
-            $tweet_text = $tweet->text;
-            $tweet_text_url = $tweet->text;
-            foreach ($tweet->entities->urls as $tweet_url)
-            {
-                $tweet_text = str_replace($tweet_url->url, $tweet_url->expanded_url, $tweet_text);
-                $tweet_text_url = str_replace($tweet_url->url, '<a href="'.$tweet_url->expanded_url.'">'.$tweet_url->display_url.'</a>', $tweet_text_url);
-            }
-            //Media are also shortened sometime so we'll change them too
-            if (isset($tweet->entities->media) && is_array($tweet->entities->media))
-            {
-                //media is an array of medias, get the first picture of it
-                foreach ($tweet->entities->media as $tweet_media)
+                //Replace shortened urls to full ones
+                $tweet_text = $tweet->text;
+                $tweet_text_url = $tweet->text;
+                foreach ($tweet->entities->urls as $tweet_url)
                 {
-                    $tweet_text = str_replace($tweet_media->url, $tweet_media->media_url_https, $tweet_text);
-                    $tweet_text_url = str_replace($tweet_media->url, '<a href="'.$tweet_media->expanded_url.'">'.$tweet_media->display_url.'</a>', $tweet_text_url);
+                    $tweet_text = str_replace($tweet_url->url, $tweet_url->expanded_url, $tweet_text);
+                    $tweet_text_url = str_replace($tweet_url->url, '<a href="'.$tweet_url->expanded_url.'">'.$tweet_url->display_url.'</a>', $tweet_text_url);
                 }
-            }
-
-            $tags['text']           = $tweet_text;
-            //$tags['text_url']     = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $tweet_text);
-            $tags['text_url']       = $tweet_text_url;
-            $tags['date']           = $tweet_date->getTimestamp();
-            $tags['social_network'] = "Twitter";
-            $tags['retweets_count'] = $tweet->retweet_count;
-            $tags['favorites_count']= $tweet->favorite_count;
-            
-            $tags['retweet_url']    = 'https://twitter.com/intent/retweet?tweet_id='.$tweet->id;
-            $tags['favorite_url']   = 'https://twitter.com/intent/favorite?tweet_id='.$tweet->id;
-            $tags['reply_url']      = 'https://twitter.com/intent/tweet?in_reply_to='.$tweet->id;
-
-            //User data
-            $tags['from']           = $tweet->user->name;
-            $tags['username']       = $tweet->user->screen_name;
-            $tags['profile_picture']= $tweet->user->profile_image_url_https;
-            $tags['profile_url']    = 'https://twitter.com/'.$tweet->user->screen_name;
-
-            if (isset($tweet->entities->media) && is_array($tweet->entities->media))
-            {
-                //media is an array of medias, get the first picture of it
-                foreach ($tweet->entities->media as $tweet_media)
+                //Media are also shortened sometime so we'll change them too
+                if (isset($tweet->entities->media) && is_array($tweet->entities->media))
                 {
-                    if ($tweet_media->type = "photo")
+                    //media is an array of medias, get the first picture of it
+                    foreach ($tweet->entities->media as $tweet_media)
                     {
-                        $tags['picture'] = $tweet_media->media_url_https;
-                        break;
+                        $tweet_text = str_replace($tweet_media->url, $tweet_media->media_url_https, $tweet_text);
+                        $tweet_text_url = str_replace($tweet_media->url, '<a href="'.$tweet_media->expanded_url.'">'.$tweet_media->display_url.'</a>', $tweet_text_url);
                     }
                 }
-            }
+
+                $tags['text']           = $tweet_text;
+                //$tags['text_url']     = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $tweet_text);
+                $tags['text_url']       = $tweet_text_url;
+                $tags['date']           = $tweet_date->getTimestamp();
+                $tags['social_network'] = "Twitter";
+                $tags['retweets_count'] = $tweet->retweet_count;
+                $tags['favorites_count']= $tweet->favorite_count;
+                
+                $tags['retweet_url']    = 'https://twitter.com/intent/retweet?tweet_id='.$tweet->id;
+                $tags['favorite_url']   = 'https://twitter.com/intent/favorite?tweet_id='.$tweet->id;
+                $tags['reply_url']      = 'https://twitter.com/intent/tweet?in_reply_to='.$tweet->id;
+
+                //User data
+                $tags['from']           = $tweet->user->name;
+                $tags['username']       = $tweet->user->screen_name;
+                $tags['profile_picture']= $tweet->user->profile_image_url_https;
+                $tags['profile_url']    = 'https://twitter.com/'.$tweet->user->screen_name;
+
+                if (isset($tweet->entities->media) && is_array($tweet->entities->media))
+                {
+                    //media is an array of medias, get the first picture of it
+                    foreach ($tweet->entities->media as $tweet_media)
+                    {
+                        if ($tweet_media->type = "photo")
+                        {
+                            $tags['picture'] = $tweet_media->media_url_https;
+                            break;
+                        }
+                    }
+                }
+            } //ENDIF isset($tweet->created_at) && isset($tweet->text)
         }
         else if (array_key_exists("facebook", $post))
         {
