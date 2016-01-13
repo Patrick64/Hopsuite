@@ -14,11 +14,11 @@ class hop_social_merge_mcp
      * Build the navigation menu for the module
     */
     function build_nav()
-    {
-        ee()->cp->set_right_nav(array(
-            lang('hop_social_merge_module_name')    => BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge',
-            lang('nav_settings')                    => BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge'.AMP.'method=settings',
-        ));
+    {	
+		$sidebar = ee('CP/Sidebar')->make();
+		
+		$sidebar->addHeader(lang('nav_how_to'), ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME));
+		$sidebar->addHeader(lang('nav_settings'), ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings'));
     }
 
     function index()
@@ -28,7 +28,14 @@ class hop_social_merge_mcp
 
         $vars = array();
 
-        return ee()->load->view('index', $vars, TRUE);
+        // return ee()->load->view('index', $vars, TRUE);
+		return array(
+			'heading'		=> lang('nav_how_to'),
+			'body'			=> ee('View')->make(HOP_SOCIAL_MERGE_NAME.':index')->render($vars),
+			'breadcrumb'	=> array(
+			  ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME)->compile() => lang('hop_social_merge_module_name')
+			),
+		);
     }
 
     function settings()
@@ -61,7 +68,7 @@ class hop_social_merge_mcp
             {
                 Hop_social_merge_helper::save_settings($settings);
                 ee()->session->set_flashdata('message_success', lang('settings_saved_success'));
-                ee()->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge'.AMP.'method=settings');
+                ee()->functions->redirect(ee('CP/URL')->make('addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings'));
             }
             else
             {
@@ -76,9 +83,16 @@ class hop_social_merge_mcp
             $vars["settings"] = Hop_social_merge_helper::get_settings();
         }
 
-        $vars['action_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge'.AMP.'method=settings';
+        $vars['action_url'] = ee('CP/URL')->make('addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings');
         $vars['form_hidden'] = array('action' => 'save_settings');
 
-        return ee()->load->view('settings', $vars, TRUE);
+        // return ee()->load->view('settings', $vars, TRUE);
+		return array(
+			'heading'			=> lang('nav_settings'),
+			'body'				=> ee('View')->make(HOP_SOCIAL_MERGE_NAME.':settings')->render($vars),
+			'breadcrumb'	=> array(
+			  ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME)->compile() => lang('hop_social_merge_module_name')
+			),
+		);
     }
 }

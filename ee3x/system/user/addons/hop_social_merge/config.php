@@ -20,3 +20,13 @@ $config['nsm_addon_updater']['versions_xml']='http://www.hopstudios.com/software
 if (!defined("HOP_SOCIAL_MERGE_VERSION")) {
 	define('HOP_SOCIAL_MERGE_VERSION', $config['version']);
 }
+
+//Clean name constant
+if (!defined("HOP_SOCIAL_MERGE_NAME")) {
+	define('HOP_SOCIAL_MERGE_NAME', 'hop_social_merge');
+}
+
+//Full addon name
+if (!defined("HOP_SOCIAL_MERGE_FULL_NAME")) {
+	define('HOP_SOCIAL_MERGE_FULL_NAME', $config['name']);
+}
