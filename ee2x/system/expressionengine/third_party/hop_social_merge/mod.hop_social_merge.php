@@ -60,6 +60,10 @@ class Hop_social_merge
         return $this->return_data;
     }
 
+	/**
+	 * Look at parameters set in template tag and check them/make them available
+	 * @return [type] [description]
+	 */
     private function _process_parameters()
     {
         $this->twitter_screen_name = ee()->TMPL->fetch_param('twitter_username');
