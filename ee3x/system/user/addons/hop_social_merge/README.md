@@ -3,6 +3,10 @@
 
 ## Usage
 
+### Find the facebook numeric id of a page or a person
+
+You can use external websites for that, like [http://findmyfbid.com](http://findmyfbid.com/).
+
 ### `{exp:hop_social_merge:simple}` simple tag
 
 Displays a simple list of social posts (`<ul>` -> `<li>` list).

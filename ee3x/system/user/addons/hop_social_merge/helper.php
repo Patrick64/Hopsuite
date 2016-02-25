@@ -12,12 +12,14 @@ class Hop_social_merge_helper
 	private static function _get_default_settings()
 	{
 		return array(
-			'cache_ttl'				 => '5',
+			'cache_ttl'					=> '5',
 			'facebook_app_token'		=> '',
-			'twitter_token'			 => '',
-			'twitter_token_secret'	  => '',
-			'twitter_consumer_key'	  => '',
-			'twitter_consumer_secret'   => ''
+			'facebook_app_id'			=> '',
+			'facebook_app_secret'		=> '',
+			'twitter_token'				=> '',
+			'twitter_token_secret'		=> '',
+			'twitter_consumer_key'		=> '',
+			'twitter_consumer_secret'	=> ''
 		);
 	}
 
@@ -128,7 +130,8 @@ class Hop_social_merge_helper
 			//Our posts will be stored in there
 			$timeline = array();
 
-			if ($get_facebook)
+			// Verify that we have app id and app secret
+			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
 			{
 				//Let's get those Facebook posts
 
@@ -142,7 +145,9 @@ class Hop_social_merge_helper
 					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares',
 				);
 
-				$api_params = array("access_token" => $facebook_token);
+				// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
+				// $api_params = array("access_token" => $facebook_token);
+				$api_params = array("access_token" => $settings['facebook_app_id'].'|'.$settings['facebook_app_secret']);
 				$facebook_api = new FacebookAPIWrapper($api_params);
 				$result = $facebook_api->get($facebook_page_id."/posts", $post_params);
 

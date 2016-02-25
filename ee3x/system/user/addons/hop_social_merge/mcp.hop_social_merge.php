@@ -5,30 +5,30 @@ require_once PATH_THIRD.'hop_social_merge/helper.php';
 class hop_social_merge_mcp
 {
   
-    function __construct()
-    {
-        ee()->load->library('logger');
-    }
+	function __construct()
+	{
+		ee()->load->library('logger');
+	}
   
-    /**
-     * Build the navigation menu for the module
-    */
-    function build_nav()
-    {	
+	/**
+	 * Build the navigation menu for the module
+	*/
+	function build_nav()
+	{	
 		$sidebar = ee('CP/Sidebar')->make();
 		
 		$sidebar->addHeader(lang('nav_how_to'), ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME));
 		$sidebar->addHeader(lang('nav_settings'), ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings'));
-    }
+	}
 
-    function index()
-    {
-        $this->build_nav();
-        ee()->view->cp_page_title = lang('hop_social_merge_module_name');
+	function index()
+	{
+		$this->build_nav();
+		ee()->view->cp_page_title = lang('hop_social_merge_module_name');
+		
+		$vars = array();
 
-        $vars = array();
-
-        // return ee()->load->view('index', $vars, TRUE);
+		// return ee()->load->view('index', $vars, TRUE);
 		return array(
 			'heading'		=> lang('nav_how_to'),
 			'body'			=> ee('View')->make(HOP_SOCIAL_MERGE_NAME.':index')->render($vars),
@@ -36,11 +36,11 @@ class hop_social_merge_mcp
 			  ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME)->compile() => lang('hop_social_merge_module_name')
 			),
 		);
-    }
+	}
 
-    function settings()
-    {
-        $this->build_nav();
+	function settings()
+	{
+		$this->build_nav();
 		
 		$settings = Hop_social_merge_helper::get_settings();
 		
@@ -62,10 +62,17 @@ class hop_social_merge_mcp
 					)
 				),
 				array(
-					'title' => 'label_fcbk_app_token',
-					'desc' => 'label_sub_fcbk_app_token',
+					'title' => 'label_fcbk_app_id',
+					'desc' => 'label_sub_fcbk_app_id',
 					'fields' => array(
-						'facebook_app_token' => array('type' => 'text', 'value' => $settings['facebook_app_token'])
+						'facebook_app_id' => array('type' => 'text', 'value' => $settings['facebook_app_id'])
+					)
+				),
+				array(
+					'title' => 'label_fcbk_app_secret',
+					'desc' => 'label_sub_fcbk_app_secret',
+					'fields' => array(
+						'facebook_app_secret' => array('type' => 'text', 'value' => $settings['facebook_app_secret'])
 					)
 				),
 				array(
@@ -105,10 +112,10 @@ class hop_social_merge_mcp
 			)
 		);
 		
-        if (ee()->input->post('action') == "save_settings")
-        {
-            $settings = array();
-            $form_is_valid = TRUE;
+		if (ee()->input->post('action') == "save_settings")
+		{
+			$settings = array();
+			$form_is_valid = TRUE;
 			
 			// Validation
 			$validator = ee('Validation')->make();
@@ -156,9 +163,9 @@ class hop_social_merge_mcp
 				$vars["settings"] = $settings;
 			}
 
-        }
+		}
 
-        // return ee()->load->view('settings', $vars, TRUE);
+		// return ee()->load->view('settings', $vars, TRUE);
 		return array(
 			'heading'			=> lang('nav_settings'),
 			'body'				=> ee('View')->make(HOP_SOCIAL_MERGE_NAME.':settings')->render($vars),
@@ -166,5 +173,5 @@ class hop_social_merge_mcp
 			  ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME)->compile() => lang('hop_social_merge_module_name')
 			),
 		);
-    }
+	}
 }
