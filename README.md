@@ -2,6 +2,8 @@
 
 Note: Name is not definitive
 
+[More information, how to use...](ee3x/system/user/addons/hop_social_merge/README.md)
+
 Want more ?
 ===========
 Take a look at our [ExpressionEngine Add-Ons](http://www.hopstudios.com/software)
