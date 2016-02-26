@@ -57,7 +57,7 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `{date format="%Y-%m-%d"}` Date of the social post. You can use format="%Y-%m-%d" parameter to specify the date format (just as data tag in exp:channel:entries)
 - `{favorites_count}` *Twitter only* This will display the number of time the tweet has been saved as favorite
 - `{favorite_url}` *Twitter only* This will output an intent url to favourite the tweet (see [https://dev.twitter.com/web/intents](https://dev.twitter.com/web/intents))
-- `{from}` This will display the username of the person/page that sent the social post
+- `{from}` This will display the twitter username or the person/page name
 - `{likes_count}` *Facebook only* This will display the number of likes of the Facebook post
 - `{picture}` This is a url to an image if any is provided in the post.
 - `{profile_picture}` *Twitter only* This is a url of the Twitter avatar of the person who posted the tweet.
@@ -69,7 +69,7 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `{social_network}` This will display "Facebook" or "Twitter", depending on the source of the social post.
 - `{text}` This will display the raw text of the social post. No url will be parsed as url.
 - `{text_url}` This will display the post with the url parsed (meaning urls will be clickable)   
-- `{username}` *Twitter only* This will display the Twitter screen name
+- `{screen_name}` *Twitter only* This will display the Twitter screen name
 
 
 ## Changelog 

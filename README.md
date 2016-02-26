@@ -2,8 +2,6 @@
 
 Note: Name is not definitive
 
-##WIP
-
 Want more ?
 ===========
 Take a look at our [ExpressionEngine Add-Ons](http://www.hopstudios.com/software)

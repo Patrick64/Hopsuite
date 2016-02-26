@@ -177,7 +177,7 @@ class Hop_social_merge
             'retweets_count'    => 0,
             'favorites_count'   => 0,
             'from'              => "",
-            'username'          => "",
+            'screen_name'       => "",
             'profile_picture'   => "",
             'profile_url'       => "",
             'picture'           => "",
@@ -226,8 +226,8 @@ class Hop_social_merge
                 $tags['reply_url']      = 'https://twitter.com/intent/tweet?in_reply_to='.$tweet->id;
 
                 //User data
-                $tags['from']           = $tweet->user->name;
-                $tags['username']       = $tweet->user->screen_name;
+                $tags['from']           = $tweet->user->screen_name;
+                $tags['screen_name']    = $tweet->user->name;
                 $tags['profile_picture']= $tweet->user->profile_image_url_https;
                 $tags['profile_url']    = 'https://twitter.com/'.$tweet->user->screen_name;
 
