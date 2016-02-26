@@ -19,16 +19,26 @@
 		</tr>
 		<tr class="<?php echo alternator('even', 'odd');?>">
 			<td>
-				<strong><label for="facebook_app_token">Facebook App Token</label></strong><div class="subtext">The Facebook app token in order to access Facebook posts.</div>
+				<strong><label for="facebook_app_id"><?=lang('label_fcbk_app_id')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_fcbk_app_id')?></div>
 			</td>
 			<td>
-				<input type="text" name="facebook_app_token" id="facebook_app_token" value="<?=$settings['facebook_app_token']?>">&nbsp;
-
+				<input type="text" name="facebook_app_id" id="facebook_app_id" value="<?=$settings['facebook_app_id']?>">&nbsp;
 			</td>
 		</tr>
 		<tr class="<?php echo alternator('even', 'odd');?>">
 			<td>
-				<strong><label for="twitter_token">Twitter Token</label></strong><div class="subtext">Subject of the email sent when a 404 occurs.</div>
+				<strong><label for="facebook_app_secret"><?=lang('label_fcbk_app_secret')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_fcbk_app_secret')?></div>
+			</td>
+			<td>
+				<input type="text" name="facebook_app_secret" id="facebook_app_secret" value="<?=$settings['facebook_app_secret']?>">&nbsp;
+			</td>
+		</tr>
+		<tr class="<?php echo alternator('even', 'odd');?>">
+			<td>
+				<strong><label for="twitter_token"><?=lang('label_twitter_token')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_twitter_token')?></div>
 			</td>
 			<td>
 				<input type="text" name="twitter_token" id="twitter_token" value="<?=$settings['twitter_token']?>">&nbsp;
@@ -37,7 +47,8 @@
 		</tr>
 		<tr class="<?php echo alternator('even', 'odd');?>">
 			<td>
-				<strong><label for="twitter_token_secret">Twitter Token Secret</label></strong><div class="subtext">Subject of the email sent when a 404 occurs.</div>
+				<strong><label for="twitter_token_secret"><?=lang('label_twitter_token_secret')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_twitter_token_secret')?></div>
 			</td>
 			<td>
 				<input type="text" name="twitter_token_secret" id="twitter_token_secret" value="<?=$settings['twitter_token_secret']?>">&nbsp;
@@ -46,7 +57,8 @@
 		</tr>
 		<tr class="<?php echo alternator('even', 'odd');?>">
 			<td>
-				<strong><label for="twitter_consumer_key">Twitter Consumer Key</label></strong><div class="subtext">Subject of the email sent when a 404 occurs.</div>
+				<strong><label for="twitter_consumer_key"><?=lang('label_twitter_cons_key')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_twitter_cons_key')?></div>
 			</td>
 			<td>
 				<input type="text" name="twitter_consumer_key" id="twitter_consumer_key" value="<?=$settings['twitter_consumer_key']?>">&nbsp;
@@ -55,7 +67,8 @@
 		</tr>
 		<tr class="<?php echo alternator('even', 'odd');?>">
 			<td>
-				<strong><label for="twitter_consumer_secret">Twitter Consumer Key Secret</label></strong><div class="subtext">Subject of the email sent when a 404 occurs.</div>
+				<strong><label for="twitter_consumer_secret"><?=lang('label_twitter_cons_key_secret')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_twitter_cons_key_secret')?></div>
 			</td>
 			<td>
 				<input type="text" name="twitter_consumer_secret" id="twitter_consumer_secret" value="<?=$settings['twitter_consumer_secret']?>">&nbsp;
