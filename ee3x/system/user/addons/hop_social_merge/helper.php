@@ -152,7 +152,6 @@ class Hop_social_merge_helper
 				$result = $facebook_api->get($facebook_page_id."/posts", $post_params);
 
 				$data = json_decode($result);
-// print_r($data);
 
 				$timeline_facebook = array();
 				if (!isset($data->error))
@@ -187,8 +186,6 @@ class Hop_social_merge_helper
 					ee()->logger->developer($message);
 				}
 
-				
-//var_dump($timeline_facebook);
 			}
 
 			if ($get_twitter)
@@ -218,7 +215,6 @@ class Hop_social_merge_helper
 					
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
 					$json = $twitter_api->get("statuses/user_timeline.json", $params );
-					// print_r($json);
 
 					// Data is an array of Tweets
 					$data = json_decode($json);
@@ -240,7 +236,6 @@ class Hop_social_merge_helper
 					
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
 					$json = $twitter_api->get("search/tweets.json", $params );
-					// print_r($json);
 					
 					// Adjustement to get an array of tweets
 					$data = json_decode($json);
@@ -255,8 +250,6 @@ class Hop_social_merge_helper
 					}
 					
 				}
-				
-// var_dump($data);
 
 				$timeline_twitter = array();
 				if ($data != null)
@@ -305,9 +298,6 @@ class Hop_social_merge_helper
 			{
 				$timeline = $timeline_twitter;
 			}
-
-
-// var_dump($timeline);
 
 			//Our timeline is ready, save it in cache 
 			if (isset(ee()->cache))

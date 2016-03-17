@@ -25,10 +25,9 @@ class FacebookAPIWrapper
     {
         $query["access_token"] = $this->access_token;
         $post_data = http_build_query($query);
-// var_dump($post_data);
 
         $url = "https://".$this->host."/".$this->api_version."/".$endpoint.'?'.$post_data;
-// var_dump($url);
+
         //open connection
         $ch = curl_init();
 
@@ -41,7 +40,7 @@ class FacebookAPIWrapper
 
         //execute post
         $result = curl_exec($ch);
-// var_dump($result);
+
         //close connection
         curl_close($ch);
 

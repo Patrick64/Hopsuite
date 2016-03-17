@@ -93,7 +93,6 @@ class Hop_social_merge
 		if ($facebook_count_str != "" && is_numeric($facebook_count_str))
 		{
 			$facebook_count = intval($facebook_count_str);
-			// echo $facebook_count;
 		}
 
 		if ($facebook_count == -1 && $twitter_count == -1)
@@ -108,7 +107,6 @@ class Hop_social_merge
 		else if ($facebook_count == -1)
 		{
 			$facebook_count = $total_count - $twitter_count;
-			// echo $facebook_count;
 			if ($facebook_count < 0)
 			{
 				$facebook_count = 0;
