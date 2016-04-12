@@ -72,6 +72,11 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `{screen_name}` *Twitter only* This will display the Twitter screen name
 
 
+## Support
+
+Having issues ? Found a bug ? Suggestions ? Contact us at [tech@hopstudios.com](mailto:tech@hopstudios.com)
+
+
 ## Changelog 
 
 ### 1.0
