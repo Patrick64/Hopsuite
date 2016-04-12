@@ -9,39 +9,15 @@ class hop_social_merge_mcp
 	{
 		ee()->load->library('logger');
 	}
-  
-	/**
-	 * Build the navigation menu for the module
-	*/
-	function build_nav()
-	{	
-		$sidebar = ee('CP/Sidebar')->make();
-		
-		$sidebar->addHeader(lang('nav_how_to'), ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME));
-		$sidebar->addHeader(lang('nav_settings'), ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings'));
-	}
 
 	function index()
 	{
-		$this->build_nav();
-		ee()->view->cp_page_title = lang('hop_social_merge_module_name');
-		
-		$vars = array();
-
-		// return ee()->load->view('index', $vars, TRUE);
-		return array(
-			'heading'		=> lang('nav_how_to'),
-			'body'			=> ee('View')->make(HOP_SOCIAL_MERGE_NAME.':index')->render($vars),
-			'breadcrumb'	=> array(
-			  ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME)->compile() => lang('hop_social_merge_module_name')
-			),
-		);
+		// No index, redirect to settings directly
+		ee()->functions->redirect(ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings')->compile());
 	}
 
 	function settings()
 	{
-		$this->build_nav();
-		
 		$settings = Hop_social_merge_helper::get_settings();
 		
 		$vars = array(

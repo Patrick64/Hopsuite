@@ -7,8 +7,6 @@ $lang = array(
 	'hop_social_merge_module_name'			=> 'Hop Social Merge',
 	'hop_social_merge_module_description'	=> 'Display and merge into one timeline your posts from Twitter and Facebook',
 	
-	
-	'nav_how_to'							=> 'How To',
 	'nav_settings'							=> 'Settings',
 
 	'label_cache_ttl'						=> 'Cache Life',
