@@ -53,6 +53,8 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 
 #### Inner tags
 
+- `{count}` Display count of the current post
+- Counts : `{facebook_count}` and `{twitter_count}` Those display the count of Facebook post and Twitter post separately.
 - `{comments_count}` *Facebook only* This will display the number of comments of that post.
 - `{date format="%Y-%m-%d"}` Date of the social post. You can use format="%Y-%m-%d" parameter to specify the date format (just as data tag in exp:channel:entries)
 - `{favorites_count}` *Twitter only* This will display the number of time the tweet has been saved as favorite
@@ -68,7 +70,8 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `{shares_count}` *Facebook only* This will display the number of times the Facebook post has been shared
 - `{social_network}` This will display "Facebook" or "Twitter", depending on the source of the social post.
 - `{text}` This will display the raw text of the social post. No url will be parsed as url.
-- `{text_url}` This will display the post with the url parsed (meaning urls will be clickable)   
+- `{text_url}` This will display the post with the url parsed (meaning urls will be clickable)
+- `{total_results}` This will display the total number of social posts.
 - `{screen_name}` *Twitter only* This will display the Twitter screen name
 
 

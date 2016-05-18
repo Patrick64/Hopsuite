@@ -130,7 +130,7 @@ class Hop_social_merge_helper
 			//Our posts will be stored in there
 			$timeline = array();
 
-			if ($get_facebook)
+			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
 			{
 				//Let's get those Facebook posts
 
@@ -140,7 +140,7 @@ class Hop_social_merge_helper
 				// Note: we specify the fields to have access to number of comments and likes (yes, if you don't do that, you don't have the counts...)
 				$post_params = array(
 					"format"		=> "json",
-					"limit"		 => $facebook_count,
+					"limit"		 	=> $facebook_count,
 					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares',
 				);
 
@@ -153,16 +153,38 @@ class Hop_social_merge_helper
 				$data = json_decode($result);
 
 				$timeline_facebook = array();
-				foreach ($data->data as $post)
+				if (!isset($data->error))
 				{
-					$data_post = new DateTime($post->created_time);
-					$post_timeline = array(
-						'timestamp' => $data_post->getTimestamp(),
-						'facebook'  => $post
-						//'facebook'  => ''
-					);
-					$timeline_facebook[] = $post_timeline;
+					
+					foreach ($data->data as $post)
+					{
+						$data_post = new DateTime($post->created_time);
+						$post_timeline = array(
+							'timestamp' => $data_post->getTimestamp(),
+							'facebook'  => $post
+							//'facebook'  => ''
+						);
+						$timeline_facebook[] = $post_timeline;
+					}
 				}
+				else
+				{
+					// Error when trying to get Facebook posts
+					// Log that so dev will know what's going on
+					$error = $data->error;
+
+					$message = 'Hop Social Merge: Error with Facebook API : ';
+					if (isset($error->code))
+					{
+						$message .= $error->code.' ';
+					}
+					if (isset($error->message))
+					{
+						$message .= $error->message;
+					}
+					ee()->logger->developer($message);
+				}
+
 			}
 
 			if ($get_twitter)
