@@ -129,6 +129,7 @@ class Hop_social_merge_helper
 
 			//Our posts will be stored in there
 			$timeline = array();
+			$timeline_facebook = array();
 
 			// Verify that we have app id and app secret
 			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
@@ -153,7 +154,6 @@ class Hop_social_merge_helper
 
 				$data = json_decode($result);
 
-				$timeline_facebook = array();
 				if (!isset($data->error))
 				{
 					
