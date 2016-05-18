@@ -142,7 +142,7 @@ class Hop_social_merge_helper
 				$post_params = array(
 					"format"		=> "json",
 					"limit"		 	=> $facebook_count,
-					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares',
+					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares,created_time',
 				);
 
 				// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
@@ -158,7 +158,14 @@ class Hop_social_merge_helper
 					
 					foreach ($data->data as $post)
 					{
-						$data_post = new DateTime($post->created_time);
+						if (isset($post->created_time))
+						{
+							$data_post = new DateTime($post->created_time);
+						}
+						else
+						{
+							$data_post = new DateTime();
+						}
 						$post_timeline = array(
 							'timestamp' => $data_post->getTimestamp(),
 							'facebook'  => $post
@@ -183,7 +190,6 @@ class Hop_social_merge_helper
 						$message .= $error->message;
 					}
 					ee()->logger->developer($message);
-					
 				}
 
 			}

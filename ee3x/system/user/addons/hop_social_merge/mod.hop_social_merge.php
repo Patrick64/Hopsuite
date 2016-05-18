@@ -246,7 +246,16 @@ class Hop_social_merge
         else if (array_key_exists("facebook", $post))
         {
             $facebook = $post['facebook'];
-            $facebook_date = new DateTime($facebook->created_time);
+            
+            if (isset($facebook->created_time))
+            {
+                $facebook_date = new DateTime($facebook->created_time);
+            }
+            else
+            {
+                $facebook_date = new DateTime();
+            }
+            
             $facebook_text = "";
             if (isset($facebook->message))
             {
