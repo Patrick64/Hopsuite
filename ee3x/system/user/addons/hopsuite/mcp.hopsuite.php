@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once PATH_THIRD.'hop_social_merge/helper.php';
+require_once PATH_THIRD.'hopsuite/helper.php';
 
-class hop_social_merge_mcp
+class hopsuite_mcp
 {
   
 	function __construct()
@@ -13,16 +13,16 @@ class hop_social_merge_mcp
 	function index()
 	{
 		// No index, redirect to settings directly
-		ee()->functions->redirect(ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings')->compile());
+		ee()->functions->redirect(ee('CP/URL', 'addons/settings/'.HOPSUITE_NAME.'/settings')->compile());
 	}
 
 	function settings()
 	{
-		$settings = Hop_social_merge_helper::get_settings();
+		$settings = Hopsuite_helper::get_settings();
 		
 		$vars = array(
 			'cp_page_title' => lang('nav_settings'),
-			'base_url' => ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings')->compile(),
+			'base_url' => ee('CP/URL', 'addons/settings/'.HOPSUITE_NAME.'/settings')->compile(),
 			'save_btn_text' => lang('settings_save'),
 			'save_btn_text_working' => lang('settings_save_working'),
 		);
@@ -118,7 +118,7 @@ class hop_social_merge_mcp
 				// We don't want to save that field, it's not a setting
 				unset($fields['action']);
 				
-				Hop_social_merge_helper::save_settings($fields);
+				Hopsuite_helper::save_settings($fields);
 				
 				ee('CP/Alert')->makeInline('shared-form')
 						->asSuccess()
@@ -126,7 +126,7 @@ class hop_social_merge_mcp
 						->addToBody(lang('preferences_updated_desc'))
 						->defer();
 
-				ee()->functions->redirect(ee('CP/URL')->make('addons/settings/'.HOP_SOCIAL_MERGE_NAME.'/settings'));
+				ee()->functions->redirect(ee('CP/URL')->make('addons/settings/'.HOPSUITE_NAME.'/settings'));
 			}
 			else
 			{
@@ -144,9 +144,9 @@ class hop_social_merge_mcp
 		// return ee()->load->view('settings', $vars, TRUE);
 		return array(
 			'heading'			=> lang('nav_settings'),
-			'body'				=> ee('View')->make(HOP_SOCIAL_MERGE_NAME.':settings')->render($vars),
+			'body'				=> ee('View')->make(HOPSUITE_NAME.':settings')->render($vars),
 			'breadcrumb'	=> array(
-			  ee('CP/URL', 'addons/settings/'.HOP_SOCIAL_MERGE_NAME)->compile() => lang('hop_social_merge_module_name')
+			  ee('CP/URL', 'addons/settings/'.HOPSUITE_NAME)->compile() => lang('hopsuite_module_name')
 			),
 		);
 	}

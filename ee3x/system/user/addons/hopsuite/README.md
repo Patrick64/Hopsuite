@@ -7,15 +7,15 @@
 
 You can use external websites for that, like [http://findmyfbid.com](http://findmyfbid.com/).
 
-### `{exp:hop_social_merge:simple}` simple tag
+### `{exp:hopsuite:simple}` simple tag
 
 Displays a simple list of social posts (`<ul>` -> `<li>` list).
 
 #### Example usage
 
-`{exp:hop_social_merge:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}`
+`{exp:hopsuite:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}`
 
-`{exp:hop_social_merge:simple twitter_search_query="#eecms" facebook_feed_id="6308437182"}`
+`{exp:hopsuite:simple twitter_search_query="#eecms" facebook_feed_id="6308437182"}`
 
 #### Parameters
 
@@ -26,11 +26,11 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `facebook_count="5"` Specify how much Facebook posts will be displayed.
 - `twitter_count="5"` Specify how much tweets will be displayed.
 
-### `{exp:hop_social_merge:timeline}` tag pair
+### `{exp:hopsuite:timeline}` tag pair
 
 #### Example usage
 
-	`{exp:hop_social_merge:timeline twitter_username="hopstudios" facebook_feed_id="6308437182"}
+	`{exp:hopsuite:timeline twitter_username="hopstudios" facebook_feed_id="6308437182"}
 	    <p>{text_url}</p>
 	    <p>{date format="%Y-%m-%d %H:%i:%s"}</p>
 	    <p>{if social_network == "Facebook"}
@@ -40,7 +40,7 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 	    {/if}</p>
 	    {if picture != ""}<p><img src="{picture}"/></p>{/if}
 	    <hr>
-	{/exp:hop_social_merge:timeline}`
+	{/exp:hopsuite:timeline}`
 
 #### Parameters
 
