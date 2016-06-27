@@ -1,5 +1,11 @@
 #Hopsuite
 
+Hopsuite allows you to pull posts from Facebook and Twitter, merge them into a unique timeline and display them the way you want using EE tags.
+
+- Fetch posts from any Facebook pages or Facebook account, fetch tweets from an account or even search results.
+
+- Cache results for improved performances
+
 [More information, how to use...](ee3x/system/user/addons/hopsuite/README.md)
 
 Want more ?
