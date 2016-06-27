@@ -6,6 +6,8 @@ Hopsuite allows you to pull posts from Facebook and Twitter, merge them into a u
 
 - Cache results for improved performances
 
+If you want to use it, [please buy it](https://devot-ee.com/developers/hop-studios). :)
+
 [More information, how to use...](ee3x/system/user/addons/hopsuite/README.md)
 
 Want more ?
