@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once PATH_THIRD.'hop_social_merge/helper.php';
+require_once PATH_THIRD.'hopsuite/helper.php';
 
-class hop_social_merge_mcp
+class hopsuite_mcp
 {
   
 	function __construct()
@@ -16,15 +16,15 @@ class hop_social_merge_mcp
 	function build_nav()
 	{
 		ee()->cp->set_right_nav(array(
-			lang('hop_social_merge_module_name')	=> BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge',
-			lang('nav_settings')					=> BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge'.AMP.'method=settings',
+			lang('hopsuite_module_name')	=> BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME,
+			lang('nav_settings')					=> BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME.AMP.'method=settings',
 		));
 	}
 
 	function index()
 	{
 		$this->build_nav();
-		ee()->view->cp_page_title = lang('hop_social_merge_module_name');
+		ee()->view->cp_page_title = lang('hopsuite_module_name');
 
 		$vars = array();
 
@@ -60,9 +60,9 @@ class hop_social_merge_mcp
 
 			if ($form_is_valid)
 			{
-				Hop_social_merge_helper::save_settings($settings);
+				Hopsuite_helper::save_settings($settings);
 				ee()->session->set_flashdata('message_success', lang('settings_saved_success'));
-				ee()->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge'.AMP.'method=settings');
+				ee()->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME.AMP.'method=settings');
 			}
 			else
 			{
@@ -74,10 +74,10 @@ class hop_social_merge_mcp
 		// No data received, means we'll load saved settings
 		if (!isset($form_is_valid))
 		{
-			$vars["settings"] = Hop_social_merge_helper::get_settings();
+			$vars["settings"] = Hopsuite_helper::get_settings();
 		}
 
-		$vars['action_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=hop_social_merge'.AMP.'method=settings';
+		$vars['action_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME.AMP.'method=settings';
 		$vars['form_hidden'] = array('action' => 'save_settings');
 
 		return ee()->load->view('settings', $vars, TRUE);

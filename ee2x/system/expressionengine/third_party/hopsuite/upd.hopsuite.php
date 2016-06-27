@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once PATH_THIRD.'hop_social_merge/helper.php';
+require_once PATH_THIRD.'hopsuite/helper.php';
 
-class hop_social_merge_upd
+class hopsuite_upd
 {
-	var $version = HOP_SOCIAL_MERGE_VERSION;
+	var $version = HOPSUITE_VERSION;
 
 	function install()
 	{
@@ -12,7 +12,7 @@ class hop_social_merge_upd
 
 		//Add module to EE modules list
 		$data = array(
-		   'module_name' => 'Hop_social_merge' ,
+		   'module_name' => 'Hopsuite' ,
 		   'module_version' => $this->version,
 		   'has_cp_backend' => 'y',
 		   'has_publish_fields' => 'n'
@@ -30,10 +30,10 @@ class hop_social_merge_upd
 		ee()->dbforge->add_field($fields);
 		ee()->dbforge->add_key('setting_name', TRUE);
 
-		ee()->dbforge->create_table('hop_social_merge_settings');
+		ee()->dbforge->create_table('hopsuite_settings');
 
 		//Save settings (the default ones will be stored)
-		Hop_social_merge_helper::save_settings();
+		Hopsuite_helper::save_settings();
 
 		return TRUE;
 	}
@@ -63,7 +63,7 @@ class hop_social_merge_upd
 		ee()->load->dbforge();
 
 		ee()->db->select('module_id');
-		$query = ee()->db->get_where('modules', array('module_name' => 'Hop_social_merge'));
+		$query = ee()->db->get_where('modules', array('module_name' => 'Hopsuite'));
 
 		ee()->db->where('module_id', $query->row('module_id'));
 		ee()->db->delete('module_member_groups');
@@ -72,7 +72,7 @@ class hop_social_merge_upd
 		ee()->db->delete('modules');
 
 		//Remove the module tables from the database
-    	ee()->dbforge->drop_table('hop_social_merge_settings');
+    	ee()->dbforge->drop_table('hopsuite_settings');
 
 		return TRUE;
 	}

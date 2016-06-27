@@ -1,4 +1,4 @@
-#Hop Social Merge
+#Hopsuite
 
 Note: Name is not definitive
 

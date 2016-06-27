@@ -1,4 +1,4 @@
-# Hop Social Merge
+# Hopsuite
 
 
 ## Usage

@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once PATH_THIRD.'hop_social_merge/config.php';
-require PATH_THIRD."hop_social_merge/libraries/TwitterAPIWrapper.php";
-require PATH_THIRD."hop_social_merge/libraries/FacebookAPIWrapper.php";
+require_once PATH_THIRD.'hopsuite/config.php';
+require PATH_THIRD."hopsuite/libraries/TwitterAPIWrapper.php";
+require PATH_THIRD."hopsuite/libraries/FacebookAPIWrapper.php";
 
-class Hop_social_merge_helper
+class Hopsuite_helper
 {
-	private static $_settings_table_name = "hop_social_merge_settings";
+	private static $_settings_table_name = "hopsuite_settings";
 	private static $_settings;
 
 	private static function _get_default_settings()
@@ -180,7 +180,7 @@ class Hop_social_merge_helper
 					// Log that so dev will know what's going on
 					$error = $data->error;
 
-					$message = 'Hop Social Merge: Error with Facebook API : ';
+					$message = 'Hopsuite: Error with Facebook API : ';
 					if (isset($error->code))
 					{
 						$message .= $error->code.' ';
@@ -227,7 +227,7 @@ class Hop_social_merge_helper
 					
 					if (isset($data->errors))
 					{
-					  ee()->logger->developer('Hop Social Merge error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
 					  $data = null;
 					}
 				}
@@ -247,7 +247,7 @@ class Hop_social_merge_helper
 					$data = json_decode($json);
 					if (isset($data->errors))
 					{
-					  ee()->logger->developer('Hop Social Merge error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
 					  $data = null;
 					}
 					else

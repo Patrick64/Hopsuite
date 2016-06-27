@@ -3,17 +3,17 @@
 <h3>Single tag</h3>
 <p>The simple tag will display a list of social posts.</p>
 <pre style="background-color: #fff; color: #111; padding: 10px;">
-{exp:hop_social_merge:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}
+{exp:hopsuite:simple twitter_username="hopstudios" facebook_feed_id="6308437182"}
 </pre>
 <p>Or</p>
 <pre style="background-color: #fff; color: #111; padding: 10px;">
-{exp:hop_social_merge:simple twitter_search_query="#eecms" facebook_feed_id="6308437182"}
+{exp:hopsuite:simple twitter_search_query="#eecms" facebook_feed_id="6308437182"}
 </pre>
 <p>In order to get facebook posts and tweets, the <u><i>twitter_username</i> or <i>twitter_search_query</i> parameter</u> and <u><i>facebook_feed_id</i></u> parameter are mandatory.</p>
 <h3>Tag Pair</h3>
 <p>The tag pair will iterate through each social post and display them using template tags. Here is a simple example :</p>
 <pre style="background-color: #fff; color: #111; padding: 10px;">
-{exp:hop_social_merge:timeline twitter_username="hopstudios" facebook_feed_id="6308437182"}
+{exp:hopsuite:timeline twitter_username="hopstudios" facebook_feed_id="6308437182"}
     &lt;p&gt;{text_url}&lt;/p&gt;
     &lt;p&gt;{date format=&quot;%Y-%m-%d %H:%i:%s&quot;}&lt;/p&gt;
     &lt;p&gt;{if social_network == &quot;Facebook&quot;}
@@ -23,7 +23,7 @@
     {/if}&lt;/p&gt;
     {if picture != &quot;&quot;}&lt;p&gt;&lt;img src=&quot;{picture}&quot;/&gt;&lt;/p&gt;{/if}
     &lt;hr&gt;
-{/exp:hop_social_merge:timeline}
+{/exp:hopsuite:timeline}
 </pre>
 
 <h3>Parameters</h3>
