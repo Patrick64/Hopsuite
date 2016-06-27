@@ -12,7 +12,7 @@ class hopsuite_upd
 
 		//Add module to EE modules list
 		$data = array(
-		   'module_name' => 'Hopsuite' ,
+		   'module_name' => 'Hopsuite',
 		   'module_version' => $this->version,
 		   'has_cp_backend' => 'y',
 		   'has_publish_fields' => 'n'

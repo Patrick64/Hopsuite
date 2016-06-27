@@ -1,6 +1,5 @@
 # Hopsuite
 
-
 ## Usage
 
 ### Find the facebook numeric id of a page or a person
@@ -81,6 +80,10 @@ Having issues ? Found a bug ? Suggestions ? Contact us at [tech@hopstudios.com](
 
 
 ## Changelog 
+
+### 1.1
+
+Now using Facebook App Id and App secret
 
 ### 1.0
 

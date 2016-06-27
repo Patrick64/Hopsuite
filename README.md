@@ -1,7 +1,5 @@
 #Hopsuite
 
-Note: Name is not definitive
-
 [More information, how to use...](ee3x/system/user/addons/hopsuite/README.md)
 
 Want more ?

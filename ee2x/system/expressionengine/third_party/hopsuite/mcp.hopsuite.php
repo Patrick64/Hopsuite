@@ -16,19 +16,13 @@ class hopsuite_mcp
 	function build_nav()
 	{
 		ee()->cp->set_right_nav(array(
-			lang('hopsuite_module_name')	=> BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME,
 			lang('nav_settings')					=> BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME.AMP.'method=settings',
 		));
 	}
 
 	function index()
 	{
-		$this->build_nav();
-		ee()->view->cp_page_title = lang('hopsuite_module_name');
-
-		$vars = array();
-
-		return ee()->load->view('index', $vars, TRUE);
+		ee()->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.HOPSUITE_NAME.AMP.'method=settings');
 	}
 
 	function settings()
