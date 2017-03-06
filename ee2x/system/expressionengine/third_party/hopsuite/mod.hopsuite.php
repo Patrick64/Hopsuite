@@ -261,17 +261,19 @@ class Hopsuite
 			}
 			
 			$facebook_text = "";
+			$facebook_and_link = "";
 			if (isset($facebook->message))
 			{
 				$facebook_text = $facebook->message;
+				$facebook_and_link = $facebook->message;
 			}
 
 			if (isset($facebook->link) && $facebook->link != "")
 			{
-				$facebook_text .= " ".$facebook->link;
+				$facebook_and_link .= " ".$facebook->link;
 			}
-			$tags['text']				= $facebook_text;
-			$tags['text_url']			= preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $facebook_text);
+			$tags['text']			   = $facebook_text;
+			$tags['text_url']		   = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $facebook_and_link);
 			$tags['date']				= $facebook_date->getTimestamp();
 			$tags['social_network']		= "Facebook";
 			if (isset($facebook->shares))
