@@ -21,7 +21,13 @@ class Hopsuite
 		ee()->load->library('logger');
 		$this->_process_parameters();
 
-		$timeline = Hopsuite_helper::_get_timeline($this->twitter_screen_name, $this->twitter_search_query, $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
+		$timeline = Hopsuite_helper::_get_timeline(array(
+			'twitter_screen_name'	=> $this->twitter_screen_name,
+			'twitter_search_query'	=> $this->twitter_search_query,
+			'twitter_count'			=> $this->twitter_count,
+			'facebook_page_id'		=> $this->facebook_page_id,
+			'facebook_count'		=> $this->facebook_count
+		));
 
 		$tag_data = '<li class="hopsuite_item hopsuite_{social_network}"><span class="hopsuite_content">{text_url}</span> <span class="hopsuite_credit"><span class="hopsuite_social_network">{social_network}</span> <span class="hopsuite_joiner">on</span> <span class="hopsuite_post_date" data-date="{date}">{date format="%Y-%m-%d %H:%i:%s"}</span></span></li>';
 
@@ -46,7 +52,13 @@ class Hopsuite
 		ee()->load->library('logger');
 		$this->_process_parameters();
 
-		$timeline = Hopsuite_helper::_get_timeline($this->twitter_screen_name, $this->twitter_search_query, $this->twitter_count, $this->facebook_page_id, $this->facebook_count);
+		$timeline = Hopsuite_helper::_get_timeline(array(
+			'twitter_screen_name'	=> $this->twitter_screen_name,
+			'twitter_search_query'	=> $this->twitter_search_query,
+			'twitter_count'			=> $this->twitter_count,
+			'facebook_page_id'		=> $this->facebook_page_id,
+			'facebook_count'		=> $this->facebook_count
+		));
 
 		if ($timeline != null && count($timeline) != 0)
 		{

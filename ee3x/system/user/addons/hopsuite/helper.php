@@ -79,8 +79,13 @@ class Hopsuite_helper
 	 * @param  [type] $facebook_count	  Number of posts to get
 	 * @return array					   An array containing all post/tweets, ordered by date, most recent first
 	 */
-	public static function _get_timeline($twitter_screen_name, $twitter_search_query, $twitter_count, $facebook_page_id, $facebook_count)
+	public static function _get_timeline($timeline_settings)
 	{
+		$twitter_screen_name = (array_key_exists('twitter_screen_name', $timeline_settings))?$timeline_settings['twitter_screen_name']:NULL;
+		$twitter_search_query = (array_key_exists('twitter_search_query', $timeline_settings))?$timeline_settings['twitter_search_query']:NULL;
+		$twitter_count = (array_key_exists('twitter_count', $timeline_settings))?$timeline_settings['twitter_count']:NULL;
+		$facebook_page_id = (array_key_exists('facebook_page_id', $timeline_settings))?$timeline_settings['facebook_page_id']:NULL;
+		$facebook_count = (array_key_exists('facebook_count', $timeline_settings))?$timeline_settings['facebook_count']:NULL;
 		$cache_key = "";
 
 		//Api limit
