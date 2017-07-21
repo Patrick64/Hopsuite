@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once PATH_THIRD.'hopsuite/config.php';
-require PATH_THIRD."hopsuite/libraries/TwitterAPIWrapper.php";
-require PATH_THIRD."hopsuite/libraries/FacebookAPIWrapper.php";
+require_once PATH_THIRD."hopsuite/libraries/TwitterAPIWrapper.php";
+require_once PATH_THIRD."hopsuite/libraries/FacebookAPIWrapper.php";
 
 class Hopsuite_helper
 {
