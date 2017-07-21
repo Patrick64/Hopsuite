@@ -80,6 +80,13 @@ class hopsuite_mcp
 					)
 				),
 				array(
+					'title' => 'label_instagram_access_token',
+					'desc' => 'label_sub_instagram_access_token',
+					'fields' => array(
+						'instagram_access_token' => array('type' => 'text', 'value' => $settings['instagram_access_token'])
+					)
+				),
+				array(
 					'title' => '',
 					'fields' => array(
 						'action' => array('type' => 'hidden', 'value' => 'save_settings')

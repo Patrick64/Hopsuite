@@ -19,7 +19,8 @@ class Hopsuite_helper
 			'twitter_token'				=> '',
 			'twitter_token_secret'		=> '',
 			'twitter_consumer_key'		=> '',
-			'twitter_consumer_secret'	=> ''
+			'twitter_consumer_secret'	=> '',
+			'instagram_access_token'	=> ''
 		);
 	}
 
