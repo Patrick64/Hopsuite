@@ -2,7 +2,7 @@
 
 ## Usage
 
-### Find the facebook numeric id of a page or a person
+### Find the Facebook numeric id of a page or a person
 
 You can use external websites for that, like [http://findmyfbid.com](http://findmyfbid.com/).
 
@@ -43,35 +43,38 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 
 #### Parameters
 
-- `twitter_username` Retrieve tweets from given username
+- `twitter_username` Retrieve tweets from given username.
 - `twitter_search_query` Retrieve tweets from given search query. Take a look at [Twitter Search Page](https://twitter.com/search-home) to have a deeper look on how it works.
-- `facebook_feed_id` Retrieve Facebook posts of the given feed id
-- `total_count="10"` Specify how much posts in total will be displayed. If `facebook_count` and `twitter_count` are specified, this will not be taken into account.
+- `facebook_feed_id` Retrieve Facebook posts of the given feed id.
+- `instagram_user_id` Retrieve Instagram posts of the given user id.
+- `total_count="10"` Specify how much posts in total will be displayed. If `facebook_count` or `twitter_count` or `instagram_count` is specified, this will not be taken into account.
 - `facebook_count="5"` Specify how much Facebook posts will be displayed.
 - `twitter_count="5"` Specify how much tweets will be displayed.
+- `instagram_count="5"` Specify how much Instagram posts will be displayed.
 
 #### Inner tags
 
 - `{count}` Display count of the current post
-- Counts : `{facebook_count}` and `{twitter_count}` Those display the count of Facebook post and Twitter post separately.
-- `{comments_count}` *Facebook only* This will display the number of comments of that post.
-- `{date format="%Y-%m-%d"}` Date of the social post. You can use format="%Y-%m-%d" parameter to specify the date format (just as data tag in exp:channel:entries)
+- Counts : `{facebook_count}`, `{twitter_count}`, `{instagram_count}` Those display the count of Facebook post, Twitter post and Instagram post separately.
+- `{comments_count}` *Facebook & Instagram* This will display the number of comments of that post.
+- `{date format="%Y-%m-%d"}` Date of the social post. You can use format="%Y-%m-%d" parameter to specify the date format (just like any date tag in ExpressionEngine)
 - `{favorites_count}` *Twitter only* This will display the number of time the tweet has been saved as favorite
-- `{favorite_url}` *Twitter only* This will output an intent url to favourite the tweet (see [https://dev.twitter.com/web/intents](https://dev.twitter.com/web/intents))
-- `{from}` This will display the twitter username or the person/page name
-- `{likes_count}` *Facebook only* This will display the number of likes of the Facebook post
+- `{favorite_url}` *Twitter only* This will output an intent url to favorite the tweet (see [https://dev.twitter.com/web/intents](https://dev.twitter.com/web/intents))
+- `{from}` This will display the Twitter username, the person/page name of Facebook or username of Instagram
+- `{likes_count}` *Facebook & Instagram* This will display the number of likes of the post
 - `{picture}` This is a url to an image if any is provided in the post.
-- `{profile_picture}` *Twitter only* This is a url of the Twitter avatar of the person who posted the tweet.
-- `{profile_url}` This will display a URL to the Twitter account or Facebook person or page that posted the social post
+- `{picture_hd}` *Instagram only* URL to 640x640px picture of the Instagram post
+- `{profile_picture}` *Twitter & Instagram* This is a url of the avatar of the person who posted
+- `{profile_url}` This will display a URL to the Twitter account, Facebook person or page or Instagram account that posted the social post
 - `{reply_url}` *Twitter only* This will output an intent url to reply to the tweet (see [https://dev.twitter.com/web/intents](https://dev.twitter.com/web/intents))
 - `{retweets_count}` *Twitter only* This will display the number of times the tweet has been retweeted
 - `{retweet_url}` *Twitter only* This will output an intent url to retweet the tweet (see [https://dev.twitter.com/web/intents](https://dev.twitter.com/web/intents))
 - `{shares_count}` *Facebook only* This will display the number of times the Facebook post has been shared
-- `{social_network}` This will display "Facebook" or "Twitter", depending on the source of the social post.
+- `{social_network}` This will display "Facebook", "Twitter" or "Instagram", depending on the source of the social post.
 - `{text}` This will display the raw text of the social post. No url will be parsed as url.
 - `{text_url}` This will display the post with the url parsed (meaning urls will be clickable)
 - `{total_results}` This will display the total number of social posts.
-- `{screen_name}` *Twitter only* This will display the Twitter screen name
+- `{screen_name}` *Twitter & Instagram* This will display the Twitter screen name or Instagram real name
 
 
 ## Support
