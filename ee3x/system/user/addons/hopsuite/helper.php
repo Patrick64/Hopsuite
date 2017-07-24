@@ -3,6 +3,7 @@
 require_once PATH_THIRD.'hopsuite/config.php';
 require_once PATH_THIRD."hopsuite/libraries/TwitterAPIWrapper.php";
 require_once PATH_THIRD."hopsuite/libraries/FacebookAPIWrapper.php";
+require_once PATH_THIRD."hopsuite/libraries/InstagramAPIWrapper.php";
 
 class Hopsuite_helper
 {
@@ -87,6 +88,9 @@ class Hopsuite_helper
 		$twitter_count = (array_key_exists('twitter_count', $timeline_settings))?$timeline_settings['twitter_count']:NULL;
 		$facebook_page_id = (array_key_exists('facebook_page_id', $timeline_settings))?$timeline_settings['facebook_page_id']:NULL;
 		$facebook_count = (array_key_exists('facebook_count', $timeline_settings))?$timeline_settings['facebook_count']:NULL;
+		$instagram_user_id = (array_key_exists('instagram_user_id', $timeline_settings))?$timeline_settings['instagram_user_id']:NULL;
+		$instagram_count = (array_key_exists('instagram_count', $timeline_settings))?$timeline_settings['instagram_count']:NULL;
+
 		$cache_key = "";
 
 		//Api limit
@@ -100,20 +104,32 @@ class Hopsuite_helper
 			$twitter_count = 200;
 			//no kidding
 		}
+		
+		if ($instagram_count > 50)
+		{
+			// TODO: no idea what the real limit is...
+			$instagram_count = 50;
+		}
 
 		//Parameters validation
 		$get_twitter = FALSE;
-		if (($twitter_screen_name != NULL && $twitter_screen_name != "") || ($twitter_search_query != NULL && $twitter_search_query != ""))
+		if (($twitter_screen_name != NULL && $twitter_screen_name != '') || ($twitter_search_query != NULL && $twitter_search_query != ''))
 		{
 			$get_twitter = TRUE;
 		}
 		$get_facebook = FALSE;
-		if ($facebook_page_id != NULL && $facebook_page_id != "")
+		if ($facebook_page_id != NULL && $facebook_page_id != '')
 		{
 			$get_facebook = TRUE;
 		}
-		
-		if (!$get_facebook && !$get_twitter)
+		$get_instagram = FALSE;
+		if ($instagram_user_id != NULL && $instagram_user_id != '')
+		{
+			$get_instagram = TRUE;
+		}
+
+
+		if (!$get_facebook && !$get_twitter && !$get_instagram)
 		{
 			return "";
 		}
@@ -129,13 +145,15 @@ class Hopsuite_helper
 		else
 		{
 			//No cache, let's use APIs !
-			
+
 			//Add-on settings
 			$settings = self::get_settings();
 
 			//Our posts will be stored in there
 			$timeline = array();
 			$timeline_facebook = array();
+			$timeline_twitter = array();
+			$timeline_instagram = array();
 
 			// Verify that we have app id and app secret
 			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
@@ -235,7 +253,7 @@ class Hopsuite_helper
 					if (isset($data->errors))
 					{
 					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
-					  $data = null;
+					  $data = NULL;
 					}
 				}
 				//Query to search for tweets
@@ -255,7 +273,7 @@ class Hopsuite_helper
 					if (isset($data->errors))
 					{
 					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
-					  $data = null;
+					  $data = NULL;
 					}
 					else
 					{
@@ -264,53 +282,55 @@ class Hopsuite_helper
 					
 				}
 
-				$timeline_twitter = array();
-				if ($data != null)
+				if ($data != NULL)
 				{
-				  foreach ($data as $tweet)
-				  {
-					  $date_tweet = new DateTime($tweet->created_at);
-					  $tweet_timeline = array(
-						  'timestamp' => $date_tweet->getTimestamp(),
-						  'tweet'	 => $tweet
-					  );
-					  $timeline_twitter[] = $tweet_timeline;
+					foreach ($data as $tweet)
+					{
+						$date_tweet = new DateTime($tweet->created_at);
+						$tweet_timeline = array(
+							'timestamp'	=> $date_tweet->getTimestamp(),
+							'tweet'	 	=> $tweet
+						);
+						$timeline_twitter[] = $tweet_timeline;
 				  }
 				}
 			}
 
-			if ($get_facebook && $get_twitter)
+			if ($get_instagram && $settings['instagram_access_token'] != "")
 			{
-				//If we need the two timelines, combine them
-				while (count($timeline_facebook) != 0)
+				$access_token = $settings['instagram_access_token'];
+				$params = array();
+				$instagram_api = new InstagramAPIWrapper($access_token);
+				$json = $instagram_api->get('users/'.$instagram_user_id.'/media/recent/', $params );
+
+				// Data is an array of Tweets
+				$data = json_decode($json);
+
+				if (isset($data->meta) && isset($data->meta->code) && $data->meta->code != 200)
 				{
-					while (count($timeline_twitter) != 0 && $timeline_facebook[0]['timestamp'] < $timeline_twitter[0]['timestamp'])
-					{
-						$timeline[] = $timeline_twitter[0];
-						array_shift($timeline_twitter);
-						if (count($timeline_twitter) == 0){ break; }
-					}
-					$timeline[] = $timeline_facebook[0];
-					array_shift($timeline_facebook);
+					ee()->logger->developer('Hopsuite error when getting instagram posts : code '. $data->meta->code . ' - ' . $data->meta->error_message);
+					$data = NULL;
 				}
 
-				if (count($timeline_twitter) != 0)
+				if ($data != NULL)
 				{
-					//we got tweets remaining
-					foreach ($timeline_twitter as $tweet)
+					foreach($data->data as $post)
 					{
-						$timeline[] = $tweet;
+						$date_post = new DateTime();
+						$date_post->setTimestamp($post->created_time);
+						$post_timeline = array(
+							'timestamp'	=> $date_post->getTimestamp(),
+							'instagram'	=> $post
+						);
+						$timeline_instagram[] = $post_timeline;
 					}
 				}
 			}
-			else if ($get_facebook)
-			{
-				$timeline = $timeline_facebook;
-			}
-			else if ($get_twitter)
-			{
-				$timeline = $timeline_twitter;
-			}
+
+			$timeline = array_merge($timeline_twitter, $timeline_facebook, $timeline_instagram);
+			usort($timeline, function($a, $b){
+				return $a['timestamp'] < $b['timestamp'];
+			});
 
 			//Our timeline is ready, save it in cache 
 			if (isset(ee()->cache))

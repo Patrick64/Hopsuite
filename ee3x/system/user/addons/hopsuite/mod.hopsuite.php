@@ -11,6 +11,7 @@ class Hopsuite
 	private $twitter_search_query;
 	private $twitter_count;
 	private $facebook_count;
+	private $instagram_user_id;
 
 	/**
 	 * Displays a simple list of
@@ -57,7 +58,8 @@ class Hopsuite
 			'twitter_search_query'	=> $this->twitter_search_query,
 			'twitter_count'			=> $this->twitter_count,
 			'facebook_page_id'		=> $this->facebook_page_id,
-			'facebook_count'		=> $this->facebook_count
+			'facebook_count'		=> $this->facebook_count,
+			'instagram_user_id'		=> $this->instagram_user_id
 		));
 
 		if ($timeline != null && count($timeline) != 0)
@@ -77,6 +79,7 @@ class Hopsuite
 		$this->twitter_screen_name = ee()->TMPL->fetch_param('twitter_username');
 		$this->twitter_search_query = ee()->TMPL->fetch_param('twitter_search_query');
 		$this->facebook_page_id = ee()->TMPL->fetch_param('facebook_feed_id');
+		$this->instagram_user_id = ee()->TMPL->fetch_param('instagram_user_id');
 		$this->_set_counts();
 	}
 
@@ -304,6 +307,24 @@ class Hopsuite
 			{
 				$tags['picture']		= $facebook->picture;
 			}
+		}
+		elseif (array_key_exists('instagram', $post))
+		{
+			$tags['social_network'] = 'Instagram';
+			$insta_post = $post['instagram'];
+			$post_date = new DateTime();
+			$post_date->setTimestamp($insta_post->created_time);
+			$tags['date'] = $post_date->getTimestamp();
+			
+			$tags['screen_name'] = $insta_post->user->full_name;
+			$tags['from'] = $insta_post->user->username;
+			$tags['profile_picture'] = $insta_post->user->profile_picture;
+			$tags['profile_url'] = 'https://www.instagram.com/'.$insta_post->user->username;
+			$tags['text'] = $insta_post->caption->text;
+			$tasg['comments_count'] = $insta_post->comments->count;
+			$tags['likes_count'] = $insta_post->likes->count;
+			$tags['picture'] = $insta_post->images->low_resolution->url;
+			$tags['picture_hd'] = $insta_post->images->standard_resolution->url;
 		}
 
 		return $tags;
