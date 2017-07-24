@@ -75,6 +75,16 @@
 
 			</td>
 		</tr>
+		<tr class="<?php echo alternator('even', 'odd');?>">
+			<td>
+				<strong><label for="instagram_access_token"><?=lang('label_instagram_access_token')?></label></strong>
+				<div class="subtext"><?=lang('label_sub_instagram_access_token')?></div>
+			</td>
+			<td>
+				<input type="text" name="instagram_access_token" id="instagram_access_token" value="<?=$settings['instagram_access_token']?>">&nbsp;
+
+			</td>
+		</tr>
 	</tbody>
 </table>
 <?=form_submit(array('name' => 'submit', 'value' => lang('settings_save'), 'class' => 'submit'))?>

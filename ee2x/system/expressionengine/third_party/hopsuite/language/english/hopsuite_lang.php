@@ -25,5 +25,7 @@ $lang = array(
 	'label_sub_twitter_cons_key'			=> 'Twitter consumer key found on your developer app page',
 	'label_twitter_cons_key_secret'			=> 'Twitter Consumer Key Secret',
 	'label_sub_twitter_cons_key_secret'		=> 'Twitter consumer key secret found on your developer app page',
+	'label_instagram_access_token'			=> 'Instagram Client Token',
+	'label_sub_instagram_access_token'		=> 'See further down the page for more instructions',
 	//END
 );

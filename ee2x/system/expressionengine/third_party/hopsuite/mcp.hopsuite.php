@@ -51,6 +51,7 @@ class hopsuite_mcp
 			$settings['twitter_token_secret']	= ee()->input->post('twitter_token_secret');
 			$settings['twitter_consumer_key']	= ee()->input->post('twitter_consumer_key');
 			$settings['twitter_consumer_secret']= ee()->input->post('twitter_consumer_secret');
+			$settings['instagram_access_token']	= ee()->input->post('instagram_access_token');
 
 			if ($form_is_valid)
 			{
