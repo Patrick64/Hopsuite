@@ -6,6 +6,10 @@
 
 You can use external websites for that, like [http://findmyfbid.com](http://findmyfbid.com/).
 
+### Find the Instagram user id
+
+Use one of the [first results in Google](https://www.google.ca/search?q=instagram+user+id).
+
 ### `{exp:hopsuite:simple}` simple tag
 
 Displays a simple list of social posts (`<ul>` -> `<li>` list).
