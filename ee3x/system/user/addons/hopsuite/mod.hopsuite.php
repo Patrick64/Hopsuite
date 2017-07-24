@@ -31,7 +31,9 @@ class Hopsuite
 			'twitter_search_query'	=> $this->twitter_search_query,
 			'twitter_count'			=> $this->twitter_count,
 			'facebook_page_id'		=> $this->facebook_page_id,
-			'facebook_count'		=> $this->facebook_count
+			'facebook_count'		=> $this->facebook_count,
+			'instagram_user_id'		=> $this->instagram_user_id,
+			'instagram_count'		=> $this->instagram_count
 		));
 
 		$tag_data = '<li class="hopsuite_item hopsuite_{social_network}"><span class="hopsuite_content">{text_url}</span> <span class="hopsuite_credit"><span class="hopsuite_social_network">{social_network}</span> <span class="hopsuite_joiner">on</span> <span class="hopsuite_post_date" data-date="{date}">{date format="%Y-%m-%d %H:%i:%s"}</span></span></li>';

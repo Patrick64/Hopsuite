@@ -22,12 +22,14 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 
 #### Parameters
 
-- `twitter_username` Retrieve tweets from given username
+- `twitter_username` Retrieve tweets from given username.
 - `twitter_search_query` Retrieve tweets from given search query. Take a look at [Twitter Search Page](https://twitter.com/search-home) to have a deeper look on how it works.
-- `facebook_feed_id` Retrieve Facebook posts of the given feed id
-- `total_count="10"` Specify how much posts in total will be displayed. If `facebook_count` and `twitter_count` are specified, this will not be taken into account.
+- `facebook_feed_id` Retrieve Facebook posts of the given feed id.
+- `instagram_user_id` Retrieve Instagram posts of the given user id.
+- `total_count="10"` Specify how much posts in total will be displayed. If `facebook_count` or `twitter_count` or `instagram_count` is specified, this will not be taken into account.
 - `facebook_count="5"` Specify how much Facebook posts will be displayed.
 - `twitter_count="5"` Specify how much tweets will be displayed.
+- `instagram_count="5"` Specify how much Instagram posts will be displayed.
 
 ### `{exp:hopsuite:timeline}` tag pair
 
