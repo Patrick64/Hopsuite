@@ -149,7 +149,7 @@ class Hopsuite
 				$instagram_count = intval($instagram_count_str);
 			}
 		}
-		
+
 
 		if ($facebook_count == 0 && $twitter_count == 0 && $instagram_count == 0)
 		{
@@ -333,7 +333,7 @@ class Hopsuite
 		else if (array_key_exists("facebook", $post))
 		{
 			$facebook = $post['facebook'];
-			
+
 			if (isset($facebook->created_time))
 			{
 				$facebook_date = new DateTime($facebook->created_time);
@@ -342,7 +342,7 @@ class Hopsuite
 			{
 				$facebook_date = new DateTime();
 			}
-			
+
 			$facebook_text = "";
 			$facebook_and_link = "";
 			if (isset($facebook->message))
@@ -387,7 +387,7 @@ class Hopsuite
 			$post_date = new DateTime();
 			$post_date->setTimestamp($insta_post->created_time);
 			$tags['date'] = $post_date->getTimestamp();
-			
+
 			$tags['screen_name'] = $insta_post->user->full_name;
 			$tags['from'] = $insta_post->user->username;
 			$tags['profile_picture'] = $insta_post->user->profile_picture;
