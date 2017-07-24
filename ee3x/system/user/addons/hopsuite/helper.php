@@ -186,7 +186,6 @@ class Hopsuite_helper
 
 				if (!isset($data->error))
 				{
-					
 					foreach ($data->data as $post)
 					{
 						if (isset($post->created_time))
@@ -241,7 +240,7 @@ class Hopsuite_helper
 					'consumer_key'				=> $twit_consumer_key,
 					'consumer_secret'			=> $twit_consumer_secret
 				);
-				
+
 				// Query to get user timeline
 				if ($twitter_screen_name != NULL && $twitter_screen_name != "")
 				{
@@ -249,13 +248,13 @@ class Hopsuite_helper
 						"screen_name"   => $twitter_screen_name,
 						"count"			=> $twitter_count
 					);
-					
+
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
 					$json = $twitter_api->get("statuses/user_timeline.json", $params );
 
 					// Data is an array of Tweets
 					$data = json_decode($json);
-					
+
 					if (isset($data->errors))
 					{
 					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
@@ -270,10 +269,10 @@ class Hopsuite_helper
 						"count"	 => $twitter_count,
 						"result_type" => 'recent'
 					);
-					
+
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
 					$json = $twitter_api->get("search/tweets.json", $params );
-					
+
 					// Adjustement to get an array of tweets
 					$data = json_decode($json);
 					if (isset($data->errors))
@@ -285,7 +284,7 @@ class Hopsuite_helper
 					{
 					  $data = $data->statuses;
 					}
-					
+
 				}
 
 				if ($data != NULL)
@@ -338,7 +337,7 @@ class Hopsuite_helper
 				return $a['timestamp'] < $b['timestamp'];
 			});
 
-			//Our timeline is ready, save it in cache 
+			//Our timeline is ready, save it in cache
 			if (isset(ee()->cache))
 			{
 				ee()->cache->save('/'.__CLASS__.'/'.$cache_key, $timeline, $settings['cache_ttl']*60);
