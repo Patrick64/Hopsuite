@@ -46,7 +46,7 @@ class Hopsuite
 
 	/**
 	 * Tag pair with accessible tags for social posts data
-	 * @return string [description]
+	 * @return string Parsed tag content
 	 */
 	function timeline()
 	{
@@ -74,6 +74,9 @@ class Hopsuite
 		return $this->return_data;
 	}
 
+	/**
+	 * Process all tag parameters, except counts
+	 */
 	private function _process_parameters()
 	{
 		$this->twitter_screen_name = ee()->TMPL->fetch_param('twitter_username');
@@ -83,6 +86,9 @@ class Hopsuite
 		$this->_set_counts();
 	}
 
+	/**
+	 * Process count tag parameters for each social network
+	 */
 	private function _set_counts()
 	{
 		$total_count = 10;
@@ -174,8 +180,8 @@ class Hopsuite
 
 	/**
 	 * This is getting specific data from social posts and set it up as an array for template tags
-	 * @param  [type] $post [description]
-	 * @return [type]	   [description]
+	 * @param  array $post array containing item timestamp and item data
+	 * @return array	   array of tags ready to be parsed
 	 */
 	private function _setup_tags($post)
 	{
