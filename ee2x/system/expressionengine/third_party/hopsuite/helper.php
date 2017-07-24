@@ -1,8 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once PATH_THIRD.'hopsuite/config.php';
-require PATH_THIRD."hopsuite/libraries/TwitterAPIWrapper.php";
-require PATH_THIRD."hopsuite/libraries/FacebookAPIWrapper.php";
+require_once PATH_THIRD."hopsuite/libraries/TwitterAPIWrapper.php";
+require_once PATH_THIRD."hopsuite/libraries/FacebookAPIWrapper.php";
+require_once PATH_THIRD."hopsuite/libraries/InstagramAPIWrapper.php";
 
 class Hopsuite_helper
 {
@@ -73,246 +74,272 @@ class Hopsuite_helper
 	/**
 	 * Get the social timeline with given parameters
 	 * Will load cache if exist, if not, load from social networks using APIs
-	 * @param  [type] $twitter_screen_name Twitter user account to get tweets from
-	 * @param  [type] $twitter_search_query Search query (if no screenname set, used for hashtags and whatnot...)
-	 * @param  [type] $twitter_count	   Number of tweets to get
-	 * @param  [type] $facebook_page_id	Facebook page if to get posts from
-	 * @param  [type] $facebook_count	  Number of posts to get
+	 * @param  array $timeline_settings Array containing all settings needed for generating a timeline
 	 * @return array					   An array containing all post/tweets, ordered by date, most recent first
 	 */
-	public static function _get_timeline($twitter_screen_name, $twitter_search_query, $twitter_count, $facebook_page_id, $facebook_count)
-	{
-		$cache_key = "";
+	 public static function _get_timeline($timeline_settings)
+ 	{
+ 		$twitter_screen_name = (array_key_exists('twitter_screen_name', $timeline_settings))?$timeline_settings['twitter_screen_name']:NULL;
+ 		$twitter_search_query = (array_key_exists('twitter_search_query', $timeline_settings))?$timeline_settings['twitter_search_query']:NULL;
+ 		$twitter_count = (array_key_exists('twitter_count', $timeline_settings))?$timeline_settings['twitter_count']:NULL;
+ 		$facebook_page_id = (array_key_exists('facebook_page_id', $timeline_settings))?$timeline_settings['facebook_page_id']:NULL;
+ 		$facebook_count = (array_key_exists('facebook_count', $timeline_settings))?$timeline_settings['facebook_count']:NULL;
+ 		$instagram_user_id = (array_key_exists('instagram_user_id', $timeline_settings))?$timeline_settings['instagram_user_id']:NULL;
+ 		$instagram_count = (array_key_exists('instagram_count', $timeline_settings))?$timeline_settings['instagram_count']:NULL;
 
-		//Api limit
-		if ($facebook_count > 25)
-		{
-			$facebook_count = 25;
-		}
+ 		$cache_key = "";
 
-		if ($twitter_count > 200)
-		{
-			$twitter_count = 200;
-			//no kidding
-		}
+ 		//Api limit
+ 		if ($facebook_count > 25)
+ 		{
+ 			$facebook_count = 25;
+ 		}
 
-		//Parameters validation
-		$get_twitter = FALSE;
-		if (($twitter_screen_name != NULL && $twitter_screen_name != "") || ($twitter_search_query != NULL && $twitter_search_query != ""))
-		{
-			$get_twitter = TRUE;
-		}
-		$get_facebook = FALSE;
-		if ($facebook_page_id != NULL && $facebook_page_id != "")
-		{
-			$get_facebook = TRUE;
-		}
-		
-		if (!$get_facebook && !$get_twitter)
-		{
-			return "";
-		}
+ 		if ($twitter_count > 200)
+ 		{
+ 			$twitter_count = 200;
+ 			//no kidding
+ 		}
+ 		
+ 		if ($instagram_count > 50)
+ 		{
+ 			// Sandbox mode: limit is 20
+ 			// TODO: no idea what the live mode limit is
+ 			$instagram_count = 50;
+ 		}
 
-		//Creating unique cache key for this configuration
-		$cache_key = md5(serialize(func_get_args()));
+ 		//Parameters validation
+ 		$get_twitter = FALSE;
+ 		if ($twitter_count > 0
+ 			&& (
+ 				($twitter_screen_name != NULL && $twitter_screen_name != '')
+ 				|| ($twitter_search_query != NULL && $twitter_search_query != '')
+ 			)
+ 		)
+ 		{
+ 			$get_twitter = TRUE;
+ 		}
+ 		$get_facebook = FALSE;
+ 		if ($facebook_count > 0 && $facebook_page_id != NULL && $facebook_page_id != '')
+ 		{
+ 			$get_facebook = TRUE;
+ 		}
+ 		$get_instagram = FALSE;
+ 		if ($instagram_count > 0 && $instagram_user_id != NULL && $instagram_user_id != '')
+ 		{
+ 			$get_instagram = TRUE;
+ 		}
 
-		if ($timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
-		{
-			//Cache found, return it
-			return $timeline_cache;
-		}
-		else
-		{
-			//No cache, let's use APIs !
-			
-			//Add-on settings
-			$settings = self::get_settings();
 
-			//Our posts will be stored in there
-			$timeline = array();
-			$timeline_facebook = array();
+ 		if (!$get_facebook && !$get_twitter && !$get_instagram)
+ 		{
+ 			return "";
+ 		}
 
-			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
-			{
-				//Let's get those Facebook posts
+ 		//Creating unique cache key for this configuration
+ 		$cache_key = md5(serialize(func_get_args()));
 
-				$facebook_token = $settings['facebook_app_token'];
+ 		if ($timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
+ 		{
+ 			//Cache found, return it
+ 			return $timeline_cache;
+ 		}
+ 		else
+ 		{
+ 			//No cache, let's use APIs !
 
-				//Get Facebook page posts
-				// Note: we specify the fields to have access to number of comments and likes (yes, if you don't do that, you don't have the counts...)
-				$post_params = array(
-					"format"		=> "json",
-					"limit"		 	=> $facebook_count,
-					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares,created_time',
-				);
+ 			//Add-on settings
+ 			$settings = self::get_settings();
 
-				// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
-				// $api_params = array("access_token" => $facebook_token);
-				$api_params = array("access_token" => $settings['facebook_app_id'].'|'.$settings['facebook_app_secret']);
-				$facebook_api = new FacebookAPIWrapper($api_params);
-				$result = $facebook_api->get($facebook_page_id."/posts", $post_params);
+ 			//Our posts will be stored in there
+ 			$timeline = array();
+ 			$timeline_facebook = array();
+ 			$timeline_twitter = array();
+ 			$timeline_instagram = array();
 
-				$data = json_decode($result);
+ 			// Verify that we have app id and app secret
+ 			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
+ 			{
+ 				//Let's get those Facebook posts
 
-				if (!isset($data->error))
-				{
-					
-					foreach ($data->data as $post)
-					{
-						if (isset($post->created_time))
-						{
-							$data_post = new DateTime($post->created_time);
-						}
-						else
-						{
-							$data_post = new DateTime();
-						}
-						$post_timeline = array(
-							'timestamp' => $data_post->getTimestamp(),
-							'facebook'  => $post
-							//'facebook'  => ''
-						);
-						$timeline_facebook[] = $post_timeline;
-					}
-				}
-				else
-				{
-					// Error when trying to get Facebook posts
-					// Log that so dev will know what's going on
-					$error = $data->error;
+ 				$facebook_token = $settings['facebook_app_token'];
 
-					$message = 'Hopsuite: Error with Facebook API : ';
-					if (isset($error->code))
-					{
-						$message .= $error->code.' ';
-					}
-					if (isset($error->message))
-					{
-						$message .= $error->message;
-					}
-					ee()->logger->developer($message);
-				}
+ 				//Get Facebook page posts
+ 				// Note: we specify the fields to have access to number of comments and likes (yes, if you don't do that, you don't have the counts...)
+ 				$post_params = array(
+ 					"format"		=> "json",
+ 					"limit"			=> $facebook_count,
+ 					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares,created_time',
+ 				);
 
-			}
+ 				// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
+ 				// $api_params = array("access_token" => $facebook_token);
+ 				$api_params = array("access_token" => $settings['facebook_app_id'].'|'.$settings['facebook_app_secret']);
+ 				$facebook_api = new FacebookAPIWrapper($api_params);
+ 				$result = $facebook_api->get($facebook_page_id."/posts", $post_params);
 
-			if ($get_twitter)
-			{
-				//Let's get those tweets
+ 				$data = json_decode($result);
 
-				$twit_token			 = $settings['twitter_token'];
-				$twit_token_secret	  = $settings['twitter_token_secret'];
-				$twit_consumer_key	  = $settings['twitter_consumer_key'];
-				$twit_consumer_secret   = $settings['twitter_consumer_secret'];
+ 				if (!isset($data->error))
+ 				{
+ 					foreach ($data->data as $post)
+ 					{
+ 						if (isset($post->created_time))
+ 						{
+ 							$data_post = new DateTime($post->created_time);
+ 						}
+ 						else
+ 						{
+ 							$data_post = new DateTime();
+ 						}
+ 						$post_timeline = array(
+ 							'timestamp' => $data_post->getTimestamp(),
+ 							'facebook'  => $post
+ 							//'facebook'  => ''
+ 						);
+ 						$timeline_facebook[] = $post_timeline;
+ 					}
+ 				}
+ 				else
+ 				{
+ 					// Error when trying to get Facebook posts
+ 					// Log that so dev will know what's going on
+ 					$error = $data->error;
 
-				//Get Twitter page posts
-				$twit_settings = array (
-					'oauth_access_token'		=> $twit_token,
-					'oauth_access_token_secret' => $twit_token_secret,
-					'consumer_key'			  => $twit_consumer_key,
-					'consumer_secret'		   => $twit_consumer_secret
-				);
-				
-				// Query to get user timeline
-				if ($twitter_screen_name != NULL && $twitter_screen_name != "")
-				{
-					$params = array(
-						"screen_name"   => $twitter_screen_name,
-						"count"		 => $twitter_count
-					);
-					
-					$twitter_api = new TwitterAPIWrapper($twit_settings);
-					$json = $twitter_api->get("statuses/user_timeline.json", $params );
+ 					$message = 'Hopsuite: Error with Facebook API : ';
+ 					if (isset($error->code))
+ 					{
+ 						$message .= $error->code.' ';
+ 					}
+ 					if (isset($error->message))
+ 					{
+ 						$message .= $error->message;
+ 					}
+ 					ee()->logger->developer($message);
+ 				}
 
-					// Data is an array of Tweets
-					$data = json_decode($json);
-					
-					if (isset($data->errors))
-					{
-					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
-					  $data = null;
-					}
-				}
-				//Query to search for tweets
-				else
-				{
-					$params = array(
-						"q"		 => $twitter_search_query,
-						"count"	 => $twitter_count,
-						"result_type" => 'recent'
-					);
-					
-					$twitter_api = new TwitterAPIWrapper($twit_settings);
-					$json = $twitter_api->get("search/tweets.json", $params );
-					
-					// Adjustement to get an array of tweets
-					$data = json_decode($json);
-					if (isset($data->errors))
-					{
-					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
-					  $data = null;
-					}
-					else
-					{
-					  $data = $data->statuses;
-					}
-					
-				}
+ 			}
 
-				$timeline_twitter = array();
-				if ($data != null)
-				{
-				  foreach ($data as $tweet)
-				  {
-					  $date_tweet = new DateTime($tweet->created_at);
-					  $tweet_timeline = array(
-						  'timestamp' => $date_tweet->getTimestamp(),
-						  'tweet'	 => $tweet
-					  );
-					  $timeline_twitter[] = $tweet_timeline;
-				  }
-				}
-			}
+ 			if ($get_twitter)
+ 			{
+ 				//Let's get those tweets
 
-			if ($get_facebook && $get_twitter)
-			{
-				//If we need the two timelines, combine them
-				while (count($timeline_facebook) != 0)
-				{
-					while (count($timeline_twitter) != 0 && $timeline_facebook[0]['timestamp'] < $timeline_twitter[0]['timestamp'])
-					{
-						$timeline[] = $timeline_twitter[0];
-						array_shift($timeline_twitter);
-						if (count($timeline_twitter) == 0){ break; }
-					}
-					$timeline[] = $timeline_facebook[0];
-					array_shift($timeline_facebook);
-				}
+ 				$twit_token				= $settings['twitter_token'];
+ 				$twit_token_secret		= $settings['twitter_token_secret'];
+ 				$twit_consumer_key		= $settings['twitter_consumer_key'];
+ 				$twit_consumer_secret	= $settings['twitter_consumer_secret'];
 
-				if (count($timeline_twitter) != 0)
-				{
-					//we got tweets remaining
-					foreach ($timeline_twitter as $tweet)
-					{
-						$timeline[] = $tweet;
-					}
-				}
-			}
-			else if ($get_facebook)
-			{
-				$timeline = $timeline_facebook;
-			}
-			else if ($get_twitter)
-			{
-				$timeline = $timeline_twitter;
-			}
+ 				//Get Twitter page posts
+ 				$twit_settings = array (
+ 					'oauth_access_token'		=> $twit_token,
+ 					'oauth_access_token_secret' => $twit_token_secret,
+ 					'consumer_key'				=> $twit_consumer_key,
+ 					'consumer_secret'			=> $twit_consumer_secret
+ 				);
 
-			//Our timeline is ready, save it in cache 
-			if (isset(ee()->cache))
-			{
-				ee()->cache->save('/'.__CLASS__.'/'.$cache_key, $timeline, $settings['cache_ttl']*60);
-			}
+ 				// Query to get user timeline
+ 				if ($twitter_screen_name != NULL && $twitter_screen_name != "")
+ 				{
+ 					$params = array(
+ 						"screen_name"   => $twitter_screen_name,
+ 						"count"			=> $twitter_count
+ 					);
 
-			return $timeline;
-		}// endif no cache found
-	}
+ 					$twitter_api = new TwitterAPIWrapper($twit_settings);
+ 					$json = $twitter_api->get("statuses/user_timeline.json", $params );
+
+ 					// Data is an array of Tweets
+ 					$data = json_decode($json);
+
+ 					if (isset($data->errors))
+ 					{
+ 					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+ 					  $data = NULL;
+ 					}
+ 				}
+ 				//Query to search for tweets
+ 				else
+ 				{
+ 					$params = array(
+ 						"q"		 => $twitter_search_query,
+ 						"count"	 => $twitter_count,
+ 						"result_type" => 'recent'
+ 					);
+
+ 					$twitter_api = new TwitterAPIWrapper($twit_settings);
+ 					$json = $twitter_api->get("search/tweets.json", $params );
+
+ 					// Adjustement to get an array of tweets
+ 					$data = json_decode($json);
+ 					if (isset($data->errors))
+ 					{
+ 					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+ 					  $data = NULL;
+ 					}
+ 					else
+ 					{
+ 					  $data = $data->statuses;
+ 					}
+
+ 				}
+
+ 				if ($data != NULL)
+ 				{
+ 					foreach ($data as $tweet)
+ 					{
+ 						$date_tweet = new DateTime($tweet->created_at);
+ 						$tweet_timeline = array(
+ 							'timestamp'	=> $date_tweet->getTimestamp(),
+ 							'tweet'	 	=> $tweet
+ 						);
+ 						$timeline_twitter[] = $tweet_timeline;
+ 				  }
+ 				}
+ 			}
+
+ 			if ($get_instagram && $settings['instagram_access_token'] != "")
+ 			{
+ 				$access_token = $settings['instagram_access_token'];
+ 				$params = array('count' => $instagram_count);
+ 				$instagram_api = new InstagramAPIWrapper($access_token);
+ 				$json = $instagram_api->get('users/'.$instagram_user_id.'/media/recent/', $params );
+
+ 				// Data is an array of Tweets
+ 				$data = json_decode($json);
+
+ 				if (isset($data->meta) && isset($data->meta->code) && $data->meta->code != 200)
+ 				{
+ 					ee()->logger->developer('Hopsuite error when getting instagram posts : code '. $data->meta->code . ' - ' . $data->meta->error_message);
+ 					$data = NULL;
+ 				}
+
+ 				if ($data != NULL)
+ 				{
+ 					foreach($data->data as $post)
+ 					{
+ 						$date_post = new DateTime();
+ 						$date_post->setTimestamp($post->created_time);
+ 						$post_timeline = array(
+ 							'timestamp'	=> $date_post->getTimestamp(),
+ 							'instagram'	=> $post
+ 						);
+ 						$timeline_instagram[] = $post_timeline;
+ 					}
+ 				}
+ 			}
+
+ 			$timeline = array_merge($timeline_twitter, $timeline_facebook, $timeline_instagram);
+ 			usort($timeline, function($a, $b){
+ 				return $a['timestamp'] < $b['timestamp'];
+ 			});
+
+ 			//Our timeline is ready, save it in cache
+ 			if (isset(ee()->cache))
+ 			{
+ 				ee()->cache->save('/'.__CLASS__.'/'.$cache_key, $timeline, $settings['cache_ttl']*60);
+ 			}
+
+ 			return $timeline;
+ 		}// endif no cache found
+ 	}
 }

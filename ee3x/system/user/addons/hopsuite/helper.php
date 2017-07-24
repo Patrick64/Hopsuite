@@ -74,11 +74,7 @@ class Hopsuite_helper
 	/**
 	 * Get the social timeline with given parameters
 	 * Will load cache if exist, if not, load from social networks using APIs
-	 * @param  [type] $twitter_screen_name Twitter user account to get tweets from
-	 * @param  [type] $twitter_search_query Search query (if no screenname set, used for hashtags and whatnot...)
-	 * @param  [type] $twitter_count	   Number of tweets to get
-	 * @param  [type] $facebook_page_id	Facebook page if to get posts from
-	 * @param  [type] $facebook_count	  Number of posts to get
+	 * @param  array $timeline_settings Array containing all settings needed for generating a timeline
 	 * @return array					   An array containing all post/tweets, ordered by date, most recent first
 	 */
 	public static function _get_timeline($timeline_settings)
