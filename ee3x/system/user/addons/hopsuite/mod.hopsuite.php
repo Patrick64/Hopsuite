@@ -393,6 +393,7 @@ class Hopsuite
 			$tags['profile_picture'] = $insta_post->user->profile_picture;
 			$tags['profile_url'] = 'https://www.instagram.com/'.$insta_post->user->username;
 			$tags['text'] = $insta_post->caption->text;
+			$tags['text_url'] = $insta_post->caption->text;
 			$tasg['comments_count'] = $insta_post->comments->count;
 			$tags['likes_count'] = $insta_post->likes->count;
 			$tags['picture'] = $insta_post->images->low_resolution->url;
