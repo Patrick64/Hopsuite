@@ -223,6 +223,7 @@ class Hopsuite
 		$timeline_tags = array();
 		$facebook_count = 0;
 		$twitter_count = 0;
+		$instagram_count = 0;
 		foreach($timeline as $post)
 		{
 			//Convert post to tag array
@@ -236,6 +237,11 @@ class Hopsuite
 			{
 				$twitter_count++;
 				$social_post['twitter_count'] = $twitter_count;
+			}
+			else if ($social_post['social_network'] == "Instagram")
+			{
+				$instagram_count++;
+				$social_post['instagram_count'] = $instagram_count;
 			}
 
 			$timeline_tags[] = $social_post;
