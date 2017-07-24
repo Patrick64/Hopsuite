@@ -146,9 +146,10 @@ class Hopsuite
 			$instagram_count_str = ee()->TMPL->fetch_param('instagram_count');
 			if ($instagram_count_str != '' && is_numeric($instagram_count_str))
 			{
-				$instagram_count == intval($instagram_count_str);
+				$instagram_count = intval($instagram_count_str);
 			}
 		}
+		
 
 		if ($facebook_count == 0 && $twitter_count == 0 && $instagram_count == 0)
 		{
