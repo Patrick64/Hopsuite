@@ -305,7 +305,7 @@ class Hopsuite_helper
 			if ($get_instagram && $settings['instagram_access_token'] != "")
 			{
 				$access_token = $settings['instagram_access_token'];
-				$params = array();
+				$params = array('count' => $instagram_count);
 				$instagram_api = new InstagramAPIWrapper($access_token);
 				$json = $instagram_api->get('users/'.$instagram_user_id.'/media/recent/', $params );
 
