@@ -107,23 +107,29 @@ class Hopsuite_helper
 		
 		if ($instagram_count > 50)
 		{
-			// TODO: no idea what the real limit is...
+			// Sandbox mode: limit is 20
+			// TODO: no idea what the live mode limit is
 			$instagram_count = 50;
 		}
 
 		//Parameters validation
 		$get_twitter = FALSE;
-		if (($twitter_screen_name != NULL && $twitter_screen_name != '') || ($twitter_search_query != NULL && $twitter_search_query != ''))
+		if ($twitter_count > 0
+			&& (
+				($twitter_screen_name != NULL && $twitter_screen_name != '')
+				|| ($twitter_search_query != NULL && $twitter_search_query != '')
+			)
+		)
 		{
 			$get_twitter = TRUE;
 		}
 		$get_facebook = FALSE;
-		if ($facebook_page_id != NULL && $facebook_page_id != '')
+		if ($facebook_count > 0 && $facebook_page_id != NULL && $facebook_page_id != '')
 		{
 			$get_facebook = TRUE;
 		}
 		$get_instagram = FALSE;
-		if ($instagram_user_id != NULL && $instagram_user_id != '')
+		if ($instagram_count > 0 && $instagram_user_id != NULL && $instagram_user_id != '')
 		{
 			$get_instagram = TRUE;
 		}

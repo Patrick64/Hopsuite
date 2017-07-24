@@ -7,11 +7,15 @@ class Hopsuite
 	var $return_data	= '';
 
 	private $facebook_page_id;
+	private $facebook_will_fetch = FALSE;
+	private $facebook_count;
 	private $twitter_username;
 	private $twitter_search_query;
 	private $twitter_count;
-	private $facebook_count;
+	private $twitter_will_fetch = FALSE;
 	private $instagram_user_id;
+	private $instagram_count;
+	private $instagram_will_fetch = FALSE;
 
 	/**
 	 * Displays a simple list of
@@ -59,7 +63,8 @@ class Hopsuite
 			'twitter_count'			=> $this->twitter_count,
 			'facebook_page_id'		=> $this->facebook_page_id,
 			'facebook_count'		=> $this->facebook_count,
-			'instagram_user_id'		=> $this->instagram_user_id
+			'instagram_user_id'		=> $this->instagram_user_id,
+			'instagram_count'		=> $this->instagram_count
 		));
 
 		if ($timeline != null && count($timeline) != 0)
@@ -75,14 +80,26 @@ class Hopsuite
 	}
 
 	/**
-	 * Process all tag parameters, except counts
+	 * Process all tag parameters
 	 */
 	private function _process_parameters()
 	{
 		$this->twitter_screen_name = ee()->TMPL->fetch_param('twitter_username');
 		$this->twitter_search_query = ee()->TMPL->fetch_param('twitter_search_query');
+		if ($this->twitter_screen_name || $this->twitter_search_query)
+		{
+			$this->twitter_will_fetch = TRUE;
+		}
 		$this->facebook_page_id = ee()->TMPL->fetch_param('facebook_feed_id');
+		if ($this->facebook_page_id)
+		{
+			$this->facebook_will_fetch = TRUE;
+		}
 		$this->instagram_user_id = ee()->TMPL->fetch_param('instagram_user_id');
+		if ($this->instagram_user_id)
+		{
+			$this->instagram_will_fetch = TRUE;
+		}
 		$this->_set_counts();
 	}
 
@@ -91,55 +108,103 @@ class Hopsuite
 	 */
 	private function _set_counts()
 	{
-		$total_count = 10;
+		$divided_by = 0;
+
+		$total_count = -1;
 		$total_count_str = ee()->TMPL->fetch_param('total_count');
 		if ($total_count_str != "" && is_numeric($total_count_str))
 		{
 			$total_count = intval($total_count_str);
 		}
 
-		$twitter_count = -1;
-		$twitter_count_str = ee()->TMPL->fetch_param('twitter_count');
-		if ($twitter_count_str != "" && is_numeric($twitter_count_str))
+		$twitter_count = 0;
+		if ($this->twitter_will_fetch)
 		{
-			$twitter_count = intval($twitter_count_str);
+			$divided_by++;
+			$twitter_count_str = ee()->TMPL->fetch_param('twitter_count');
+			if ($twitter_count_str != "" && is_numeric($twitter_count_str))
+			{
+				$twitter_count = intval($twitter_count_str);
+			}
 		}
 
-		$facebook_count = -1;
-		$facebook_count_str = ee()->TMPL->fetch_param('facebook_count');
-		if ($facebook_count_str != "" && is_numeric($facebook_count_str))
+		$facebook_count = 0;
+		if ($this->facebook_will_fetch)
 		{
-			$facebook_count = intval($facebook_count_str);
+			$divided_by++;
+			$facebook_count_str = ee()->TMPL->fetch_param('facebook_count');
+			if ($facebook_count_str != "" && is_numeric($facebook_count_str))
+			{
+				$facebook_count = intval($facebook_count_str);
+			}
 		}
 
-		if ($facebook_count == -1 && $twitter_count == -1)
+		$instagram_count = 0;
+		if ($this->instagram_will_fetch)
 		{
-			$facebook_count = floor($total_count/2);
-			$twitter_count = floor($total_count/2);
-			if ( ($facebook_count+$twitter_count) == ($total_count - 1))
+			$divided_by++;
+			$instagram_count_str = ee()->TMPL->fetch_param('instagram_count');
+			if ($instagram_count_str != '' && is_numeric($instagram_count_str))
 			{
-				$twitter_count++;
+				$instagram_count == intval($instagram_count_str);
 			}
 		}
-		else if ($facebook_count == -1)
+
+		if ($facebook_count == 0 && $twitter_count == 0 && $instagram_count == 0)
 		{
-			$facebook_count = $total_count - $twitter_count;
-			if ($facebook_count < 0)
+			if ($total_count == -1)
 			{
-				$facebook_count = 0;
+				$this->facebook_count = 0;
+				$this->twitter_count = 0;
+				$this->instagram_count = 0;
+				// Let's fetch 5 posts for each network
+				if ($this->facebook_will_fetch)
+				{
+					$this->facebook_count = 5;
+				}
+				if ($this->twitter_will_fetch)
+				{
+					$this->twitter_count = 5;
+				}
+				if ($this->instagram_will_fetch)
+				{
+					$this->instagram_count = 5;
+				}
+				return;
 			}
+
+			$single_network_count = floor($total_count/$divided_by);
+			if ($this->twitter_will_fetch)
+			{
+				$this->twitter_count = $single_network_count;
+			}
+			if ($this->facebook_will_fetch)
+			{
+				$this->facebook_count = $single_network_count;
+			}
+			if ($this->instagram_will_fetch)
+			{
+				$this->instagram_count = $single_network_count;
+			}
+			return;
 		}
-		else if ($twitter_count == -1)
+
+		if ($this->facebook_will_fetch && $facebook_count == 0)
 		{
-			$twitter_count = $total_count - $facebook_count;
-			if ($twitter_count < 0)
-			{
-				$twitter_count = 0;
-			}
+			$facebook_count = 5;
+		}
+		if ($this->twitter_will_fetch && $twitter_count == 0)
+		{
+			$twitter_count = 5;
+		}
+		if ($this->instagram_will_fetch && $instagram_count == 0)
+		{
+			$instagram_count = 5;
 		}
 
 		$this->twitter_count = $twitter_count;
 		$this->facebook_count = $facebook_count;
+		$this->instagram_count = $instagram_count;
 	}
 
 	/**
