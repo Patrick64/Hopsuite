@@ -30,6 +30,14 @@ class hopsuite_mcp
 		$this->build_nav();
 		ee()->view->cp_page_title = lang('nav_settings');
 		$vars = array();
+
+		// Generate Instagram URL to get an access token
+		// https://api.instagram.com/oauth/authorize/?client_id=xxxxxxxxxxxxxxxxxxxxxx&redirect_uri=http%3A%2F%2Fmysite.com&response_type=token&scope=public_content
+		$site_url = ee()->config->item('site_url');
+		$instagram_url = 'https://api.instagram.com/oauth/authorize/?client_id=CLIENTID&redirect_uri='.urlencode($site_url).'&response_type=token';
+		$vars['site_url'] = $site_url;
+		$vars['instagram_token_url'] = $instagram_url;
+
 		if (ee()->input->post('action') == "save_settings")
 		{
 			$settings = array();
