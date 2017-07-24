@@ -27,6 +27,14 @@ class hopsuite_mcp
 			'save_btn_text_working' => lang('settings_save_working'),
 		);
 		
+		// Generate Instagram URL to get an access token
+		// https://api.instagram.com/oauth/authorize/?client_id=xxxxxxxxxxxxxxxxxxxxxx&redirect_uri=http%3A%2F%2Fmysite.com&response_type=token&scope=public_content
+		$site_url = ee()->config->item('site_url');
+		$instagram_url = 'https://api.instagram.com/oauth/authorize/?client_id=CLIENTID&redirect_uri='.urlencode($site_url).'&response_type=token';
+		$vars['site_url'] = $site_url;
+		$vars['instagram_token_url'] = $instagram_url;
+		
+		
 		// Using EE3 API to create config form
 		$vars['sections'] = array(
 			array(
