@@ -81,6 +81,7 @@ class Hopsuite_helper
 	{
 		$twitter_screen_name = (array_key_exists('twitter_screen_name', $timeline_settings))?$timeline_settings['twitter_screen_name']:NULL;
 		$twitter_search_query = (array_key_exists('twitter_search_query', $timeline_settings))?$timeline_settings['twitter_search_query']:NULL;
+		$twitter_include_rts = $timeline_settings['twitter_include_rts'];
 		$twitter_count = (array_key_exists('twitter_count', $timeline_settings))?$timeline_settings['twitter_count']:NULL;
 		$facebook_page_id = (array_key_exists('facebook_page_id', $timeline_settings))?$timeline_settings['facebook_page_id']:NULL;
 		$facebook_count = (array_key_exists('facebook_count', $timeline_settings))?$timeline_settings['facebook_count']:NULL;
@@ -241,11 +242,13 @@ class Hopsuite_helper
 				if ($twitter_screen_name != NULL && $twitter_screen_name != "")
 				{
 					$params = array(
-						"screen_name"   => $twitter_screen_name,
-						"count"			=> $twitter_count
+						"screen_name"	=> $twitter_screen_name,
+						"count"			=> $twitter_count,
+						"include_rts"	=> ($twitter_include_rts?'true':'false')
 					);
 
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
+					// https://dev.twitter.com/rest/reference/get/statuses/user_timeline
 					$json = $twitter_api->get("statuses/user_timeline.json", $params );
 
 					// Data is an array of Tweets
@@ -261,12 +264,14 @@ class Hopsuite_helper
 				else
 				{
 					$params = array(
-						"q"		 => $twitter_search_query,
-						"count"	 => $twitter_count,
-						"result_type" => 'recent'
+						"q"				=> $twitter_search_query,
+						"count"			=> $twitter_count,
+						"result_type"	=> 'recent'
+						// "result_type"	=> 'popular'
 					);
 
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
+					// https://dev.twitter.com/rest/reference/get/search/tweets
 					$json = $twitter_api->get("search/tweets.json", $params );
 
 					// Adjustement to get an array of tweets

@@ -11,6 +11,7 @@ class Hopsuite
 	private $facebook_count;
 	private $twitter_username;
 	private $twitter_search_query;
+	private $twitter_include_rts = TRUE;
 	private $twitter_count;
 	private $twitter_will_fetch = FALSE;
 	private $instagram_user_id;
@@ -62,6 +63,7 @@ class Hopsuite
 		$timeline = Hopsuite_helper::_get_timeline(array(
 			'twitter_screen_name'	=> $this->twitter_screen_name,
 			'twitter_search_query'	=> $this->twitter_search_query,
+			'twitter_include_rts'	=> $this->twitter_include_rts,
 			'twitter_count'			=> $this->twitter_count,
 			'facebook_page_id'		=> $this->facebook_page_id,
 			'facebook_count'		=> $this->facebook_count,
@@ -88,6 +90,9 @@ class Hopsuite
 	{
 		$this->twitter_screen_name = ee()->TMPL->fetch_param('twitter_username');
 		$this->twitter_search_query = ee()->TMPL->fetch_param('twitter_search_query');
+		$this->twitter_include_rts = ee()->TMPL->fetch_param('twitter_include_rts', 'yes');
+		$this->twitter_include_rts = ($this->twitter_include_rts == 'no'?FALSE:TRUE);
+
 		if ($this->twitter_screen_name || $this->twitter_search_query)
 		{
 			$this->twitter_will_fetch = TRUE;
