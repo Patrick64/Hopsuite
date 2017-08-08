@@ -256,8 +256,8 @@ class Hopsuite_helper
 
 					if (isset($data->errors))
 					{
-					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
-					  $data = NULL;
+						ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+						$data = NULL;
 					}
 				}
 				//Query to search for tweets
@@ -278,12 +278,12 @@ class Hopsuite_helper
 					$data = json_decode($json);
 					if (isset($data->errors))
 					{
-					  ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
-					  $data = NULL;
+						ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+						$data = NULL;
 					}
 					else
 					{
-					  $data = $data->statuses;
+						$data = $data->statuses;
 					}
 
 				}
@@ -298,7 +298,7 @@ class Hopsuite_helper
 							'tweet'	 	=> $tweet
 						);
 						$timeline_twitter[] = $tweet_timeline;
-				  }
+					}
 				}
 			}
 
