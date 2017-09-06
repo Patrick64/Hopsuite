@@ -142,6 +142,7 @@ class Hopsuite_helper
 
 		if ($timeline_cache = ee()->cache->get('/'.__CLASS__.'/'.$cache_key))
 		{
+			ee()->TMPL->log_item(__CLASS__ . ': Fetching social timeline from cache');
 			//Cache found, return it
 			return $timeline_cache;
 		}
@@ -183,6 +184,7 @@ class Hopsuite_helper
 
 				if (!isset($data->error))
 				{
+					ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched Facebook posts');
 					foreach ($data->data as $post)
 					{
 						if (isset($post->created_time))
@@ -217,6 +219,8 @@ class Hopsuite_helper
 						$message .= $error->message;
 					}
 					ee()->logger->developer($message);
+
+					ee()->TMPL->log_item(__CLASS__ . ': Error when fetching Facebook posts (see developer log for more)');
 				}
 
 			}
@@ -257,7 +261,12 @@ class Hopsuite_helper
 					if (isset($data->errors))
 					{
 						ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+						ee()->TMPL->log_item(__CLASS__ . ': Error when fetching tweets (see developer log for more)');
 						$data = NULL;
+					}
+					else
+					{
+						ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched tweets');
 					}
 				}
 				//Query to search for tweets
@@ -279,10 +288,12 @@ class Hopsuite_helper
 					if (isset($data->errors))
 					{
 						ee()->logger->developer('Hopsuite error when getting tweets : '. $data->errors[0]->code . ' - ' . $data->errors[0]->message);
+						ee()->TMPL->log_item(__CLASS__ . ': Error when fetching tweets (see developer log for more)');
 						$data = NULL;
 					}
 					else
 					{
+						ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched tweets');
 						$data = $data->statuses;
 					}
 
@@ -315,11 +326,14 @@ class Hopsuite_helper
 				if (isset($data->meta) && isset($data->meta->code) && $data->meta->code != 200)
 				{
 					ee()->logger->developer('Hopsuite error when getting instagram posts : code '. $data->meta->code . ' - ' . $data->meta->error_message);
+					ee()->TMPL->log_item(__CLASS__ . ': Error when fetching instagram posts (see developer log for more)');
 					$data = NULL;
 				}
 
 				if ($data != NULL)
 				{
+					ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched instagram posts');
+
 					foreach($data->data as $post)
 					{
 						$date_post = new DateTime();
