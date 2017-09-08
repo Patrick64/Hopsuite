@@ -9,12 +9,12 @@
  * @author		Hop Studios, Inc.
  * @copyright	Copyright (c) 2015, Hop Studios, Inc.
  * @link		http://www.hopstudios.com/software
- * @version		1.1.1
+ * @version		1.1.2
  * @filesource	hopsuite/config.php
  */
 
 $config['name']='Hopsuite';
-$config['version']='1.1.1';
+$config['version']='1.1.2';
 $config['nsm_addon_updater']['versions_xml']='http://www.hopstudios.com/software/versions/hopsuite';
 
 // Version constant
