@@ -265,24 +265,28 @@ class Hopsuite
 	private function _setup_tags($post)
 	{
 		$tags = array(
-			'text'			  => "",
-			'text_url'		  => "",
-			'date'			  => "",
+			'text'				=> "",
+			'text_url'			=> "",
+			'date'				=> "",
 			'social_network'	=> "",
-			'likes_count'	   => 0,
-			'shares_count'	  => 0,
-			'comments_count'	=> 0,
+			'likes_count'		=> 0, // Fb and Insta only
+			'comments_count'	=> 0, // Fb and Insta only
 			'retweets_count'	=> 0,
-			'favorites_count'   => 0,
-			'from'			  => "",
-			'screen_name'	   => "",
-			'profile_picture'   => "",
-			'profile_url'	   => "",
-			'picture'		   => "",
+			'favorites_count'	=> 0,
+			'from'				=> "",
+			'screen_name'		=> "", // Twi and Insta only
+			'profile_picture'	=> "", // Twi and Insta only
+			'profile_url'		=> "",
+			'picture'			=> "",
+			'post_link'			=> "",
 			// Specific Twitter variables
-			'retweet_url'	   => "",
-			'favorite_url'	  => "",
-			'reply_url'		 => "",
+			'retweet_url'		=> "",
+			'favorite_url'		=> "",
+			'reply_url'			=> "",
+			// Specific Facebook variables
+			'shares_count'		=> 0,
+			// Specific Instagram variables
+			'picture_hd'		=> "",
 		);
 		if (array_key_exists("tweet", $post))
 		{
@@ -318,6 +322,7 @@ class Hopsuite
 				$tags['social_network'] = "Twitter";
 				$tags['retweets_count'] = $tweet->retweet_count;
 				$tags['favorites_count']= $tweet->favorite_count;
+				$tags['post_url']		= 'https://twitter.com/'.$tweet->user->screen_name.'/status/'.$tweet->id_str;
 
 				$tags['retweet_url']	= 'https://twitter.com/intent/retweet?tweet_id='.$tweet->id;
 				$tags['favorite_url']   = 'https://twitter.com/intent/favorite?tweet_id='.$tweet->id;
@@ -376,6 +381,7 @@ class Hopsuite
 			{
 				$tags['shares_count']   = $facebook->shares->count;
 			}
+			$tags['post_url']			= $facebook->link;
 
 			$tags['likes_count']		= $facebook->likes->summary->total_count;
 			$tags['comments_count']	 = $facebook->comments->summary->total_count;
@@ -401,6 +407,7 @@ class Hopsuite
 			$post_date->setTimestamp($insta_post->created_time);
 			$tags['date'] = $post_date->getTimestamp();
 
+			$tags['post_url']	= $insta_post->link;
 			$tags['screen_name'] = $insta_post->user->full_name;
 			$tags['from'] = $insta_post->user->username;
 			$tags['profile_picture'] = $insta_post->user->profile_picture;

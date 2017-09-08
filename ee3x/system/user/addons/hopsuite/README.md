@@ -70,6 +70,7 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `{likes_count}` *Facebook & Instagram* This will display the number of likes of the post
 - `{picture}` This is a url to an image if any is provided in the post.
 - `{picture_hd}` *Instagram only* URL to 640x640px picture of the Instagram post
+- `{post_url}` Direct link to the post
 - `{profile_picture}` *Twitter & Instagram* This is a url of the avatar of the person who posted
 - `{profile_url}` This will display a URL to the Twitter account, Facebook person or page or Instagram account that posted the social post
 - `{reply_url}` *Twitter only* This will output an intent url to reply to the tweet (see [https://dev.twitter.com/web/intents](https://dev.twitter.com/web/intents))
