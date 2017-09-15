@@ -3,7 +3,7 @@
 class FacebookAPIWrapper
 {
     private $host = 'graph.facebook.com';
-    private $api_version = "v2.6";
+    private $api_version = "v2.10";
     private $access_token = "";
 
     public function __construct(array $settings)
