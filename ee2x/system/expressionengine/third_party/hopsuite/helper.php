@@ -184,7 +184,7 @@ class Hopsuite_helper
 
 				if (!isset($data->error))
 				{
-					ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched Facebook posts');
+					ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched Facebook posts ('.count($data->data).' posts)');
 					foreach ($data->data as $post)
 					{
 						if (isset($post->created_time))
