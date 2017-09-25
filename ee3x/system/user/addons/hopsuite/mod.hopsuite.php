@@ -315,21 +315,21 @@ class Hopsuite
 					}
 				}
 
-				$tags['text']		   = $tweet_text;
+				$tags['text']			= $tweet_text;
 				//$tags['text_url']	 = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $tweet_text);
-				$tags['text_url']	   = $tweet_text_url;
-				$tags['date']		   = $tweet_date->getTimestamp();
-				$tags['social_network'] = "Twitter";
-				$tags['retweets_count'] = $tweet->retweet_count;
+				$tags['text_url']		= $tweet_text_url;
+				$tags['date']			= $tweet_date->getTimestamp();
+				$tags['social_network']	= "Twitter";
+				$tags['retweets_count']	= $tweet->retweet_count;
 				$tags['favorites_count']= $tweet->favorite_count;
 				$tags['post_url']		= 'https://twitter.com/'.$tweet->user->screen_name.'/status/'.$tweet->id_str;
 
 				$tags['retweet_url']	= 'https://twitter.com/intent/retweet?tweet_id='.$tweet->id;
-				$tags['favorite_url']   = 'https://twitter.com/intent/favorite?tweet_id='.$tweet->id;
-				$tags['reply_url']	  = 'https://twitter.com/intent/tweet?in_reply_to='.$tweet->id;
+				$tags['favorite_url']	= 'https://twitter.com/intent/favorite?tweet_id='.$tweet->id;
+				$tags['reply_url']		= 'https://twitter.com/intent/tweet?in_reply_to='.$tweet->id;
 
 				//User data
-				$tags['from']		   = $tweet->user->screen_name;
+				$tags['from']			= $tweet->user->screen_name;
 				$tags['screen_name']	= $tweet->user->name;
 				$tags['profile_picture']= $tweet->user->profile_image_url_https;
 				$tags['profile_url']	= 'https://twitter.com/'.$tweet->user->screen_name;
@@ -373,23 +373,26 @@ class Hopsuite
 			{
 				$facebook_and_link .= " ".$facebook->link;
 			}
-			$tags['text']			   = $facebook_text;
-			$tags['text_url']		   = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $facebook_and_link);
-			$tags['date']			   = $facebook_date->getTimestamp();
-			$tags['social_network']	 = "Facebook";
+			$tags['text']				= $facebook_text;
+			$tags['text_url']			= preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $facebook_and_link);
+			$tags['date']				= $facebook_date->getTimestamp();
+			$tags['social_network']		= "Facebook";
 			if (isset($facebook->shares))
 			{
-				$tags['shares_count']   = $facebook->shares->count;
+				$tags['shares_count']	= $facebook->shares->count;
 			}
-			$tags['post_url']			= $facebook->link;
+			if (isset($facebook->link))
+			{
+				$tags['post_url']		= $facebook->link;
+			}
 
 			$tags['likes_count']		= $facebook->likes->summary->total_count;
-			$tags['comments_count']	 = $facebook->comments->summary->total_count;
+			$tags['comments_count']		= $facebook->comments->summary->total_count;
 
 			//User data
-			$tags['from']			   = $facebook->from->name;
+			$tags['from']				= $facebook->from->name;
 			//We don't have that in Facebook data...
-			//$tags['profile_picture']  = $facebook->from->
+			//$tags['profile_picture']	= $facebook->from->
 			$tags['profile_picture']	= '';
 			$tags['profile_url']		= 'https://www.facebook.com/'.$facebook->from->id;
 
@@ -407,17 +410,17 @@ class Hopsuite
 			$post_date->setTimestamp($insta_post->created_time);
 			$tags['date'] = $post_date->getTimestamp();
 
-			$tags['post_url']	= $insta_post->link;
-			$tags['screen_name'] = $insta_post->user->full_name;
-			$tags['from'] = $insta_post->user->username;
-			$tags['profile_picture'] = $insta_post->user->profile_picture;
-			$tags['profile_url'] = 'https://www.instagram.com/'.$insta_post->user->username;
-			$tags['text'] = $insta_post->caption->text;
-			$tags['text_url'] = $insta_post->caption->text;
-			$tasg['comments_count'] = $insta_post->comments->count;
-			$tags['likes_count'] = $insta_post->likes->count;
-			$tags['picture'] = $insta_post->images->low_resolution->url;
-			$tags['picture_hd'] = $insta_post->images->standard_resolution->url;
+			$tags['post_url']		= $insta_post->link;
+			$tags['screen_name']	= $insta_post->user->full_name;
+			$tags['from']			= $insta_post->user->username;
+			$tags['profile_picture']= $insta_post->user->profile_picture;
+			$tags['profile_url']	= 'https://www.instagram.com/'.$insta_post->user->username;
+			$tags['text']			= $insta_post->caption->text;
+			$tags['text_url']		= $insta_post->caption->text;
+			$tasg['comments_count']	= $insta_post->comments->count;
+			$tags['likes_count']	= $insta_post->likes->count;
+			$tags['picture']		= $insta_post->images->low_resolution->url;
+			$tags['picture_hd']		= $insta_post->images->standard_resolution->url;
 		}
 
 		return $tags;

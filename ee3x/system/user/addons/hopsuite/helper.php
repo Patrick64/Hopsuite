@@ -163,67 +163,57 @@ class Hopsuite_helper
 			if ($get_facebook && $settings['facebook_app_id'] != "" && $settings['facebook_app_secret'] != "")
 			{
 				//Let's get those Facebook posts
-
-				$facebook_token = $settings['facebook_app_token'];
-
-				//Get Facebook page posts
-				// Note: we specify the fields to have access to number of comments and likes (yes, if you don't do that, you don't have the counts...)
-				$post_params = array(
-					"format"		=> "json",
-					"limit"			=> $facebook_count,
-					"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares,created_time',
-				);
-
-				// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
-				// $api_params = array("access_token" => $facebook_token);
-				$api_params = array("access_token" => $settings['facebook_app_id'].'|'.$settings['facebook_app_secret']);
-				$facebook_api = new FacebookAPIWrapper($api_params);
-				$result = $facebook_api->get($facebook_page_id."/posts", $post_params);
-
-				$data = json_decode($result);
-
-				if (!isset($data->error))
+				// Facebook ID can be a list of ids separated by |
+				$facebook_page_ids = explode('|', $facebook_page_id);
+				foreach ($facebook_page_ids as $fb_page_id)
 				{
-					ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched Facebook posts ('.count($data->data).' posts)');
-					foreach ($data->data as $post)
+					if ($fb_page_id != '')
 					{
-						if (isset($post->created_time))
+						$data = self::_get_facebook_timeline($settings['facebook_app_id'], $settings['facebook_app_secret'], $fb_page_id, $facebook_count);
+
+						if (!isset($data->error))
 						{
-							$data_post = new DateTime($post->created_time);
+							ee()->TMPL->log_item(__CLASS__ . ': Successfully fetched Facebook posts ('.count($data->data).' posts)');
+							foreach ($data->data as $post)
+							{
+								if (isset($post->created_time))
+								{
+									$data_post = new DateTime($post->created_time);
+								}
+								else
+								{
+									$data_post = new DateTime();
+								}
+								$post_timeline = array(
+									'timestamp' => $data_post->getTimestamp(),
+									'facebook'  => $post
+								);
+								// We don't care about how it's added, all posts are sorted at the end of the process
+								$timeline_facebook[] = $post_timeline;
+							}
 						}
 						else
 						{
-							$data_post = new DateTime();
+							// Error when trying to get Facebook posts
+							// Log that so dev will know what's going on
+							$error = $data->error;
+
+							$message = 'Hopsuite: Error with Facebook API when fetching data for page '.$fb_page_id.': ';
+							if (isset($error->code))
+							{
+								$message .= $error->code.' ';
+							}
+							if (isset($error->message))
+							{
+								$message .= $error->message;
+							}
+							ee()->logger->developer($message);
+
+							ee()->TMPL->log_item(__CLASS__ . ': Error when fetching Facebook posts (see developer log for more)');
 						}
-						$post_timeline = array(
-							'timestamp' => $data_post->getTimestamp(),
-							'facebook'  => $post
-							//'facebook'  => ''
-						);
-						$timeline_facebook[] = $post_timeline;
 					}
-				}
-				else
-				{
-					// Error when trying to get Facebook posts
-					// Log that so dev will know what's going on
-					$error = $data->error;
-
-					$message = 'Hopsuite: Error with Facebook API : ';
-					if (isset($error->code))
-					{
-						$message .= $error->code.' ';
-					}
-					if (isset($error->message))
-					{
-						$message .= $error->message;
-					}
-					ee()->logger->developer($message);
-
-					ee()->TMPL->log_item(__CLASS__ . ': Error when fetching Facebook posts (see developer log for more)');
-				}
-
-			}
+				} // END foreach facebook page ids
+			} // END if facebook app id and app secret
 
 			if ($get_twitter)
 			{
@@ -360,5 +350,29 @@ class Hopsuite_helper
 
 			return $timeline;
 		}// endif no cache found
+	}
+
+	public static function _get_facebook_timeline($facebook_app_id, $facebook_app_secret, $facebook_page_id, $facebook_count)
+	{
+		//Get Facebook page posts
+		// Note: we specify the fields to have access to number of comments and likes (yes, if you don't do that, you don't have the counts...)
+		$post_params = array(
+			"format"		=> "json",
+			"limit"			=> $facebook_count,
+			"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares,created_time',
+		);
+
+		// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
+		// $api_params = array("access_token" => $facebook_token);
+		$api_params = array("access_token" => $facebook_app_id.'|'.$facebook_app_secret);
+		$facebook_api = new FacebookAPIWrapper($api_params);
+		// This API call can be either /feed or /posts, not sure what's best
+		// I think /feed might include external posts on a page
+		// see https://developers.facebook.com/docs/graph-api/reference/v2.10/page/feed
+		$result = $facebook_api->get($facebook_page_id."/posts", $post_params);
+
+		$data = json_decode($result);
+
+		return $data;
 	}
 }
