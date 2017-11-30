@@ -97,6 +97,14 @@ Having issues ? Found a bug ? Suggestions ? Contact us at [tech@hopstudios.com](
 * Update Facebook API to 2.10
 * Allow multiple Facebook page ids
 
+### 1.1.2
+
+* Add new tag {post_url}
+
+### 1.1.1
+
+* Fix bug with {text} tag for Facebook posts
+
 ### 1.1
 
 * Now using Facebook App Id and App secret
