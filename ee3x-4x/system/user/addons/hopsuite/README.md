@@ -51,6 +51,7 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 
 - `twitter_username` Retrieve tweets from given username.
 - `twitter_search_query` Retrieve tweets from given search query. Take a look at [Twitter Search Page](https://twitter.com/search-home) to have a deeper look on how it works.
+- `twitter_include_rts="yes"` Include retweets (default: yes)
 - `facebook_feed_id` Retrieve Facebook posts of the given feed id.
 - `instagram_user_id` Retrieve Instagram posts of the given user id.
 - `total_count="10"` Specify how much posts in total will be displayed. If `facebook_count` or `twitter_count` or `instagram_count` is specified, this will not be taken into account.
