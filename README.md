@@ -49,7 +49,8 @@ Technical support is available through e-mail, at sales@hopstudios.com. Hop Stud
 Refunds
 
 Hop Studios offers refunds on software within 30 days of purchase. Contact sales@hopstudios.com for assistance. This does not apply if the Software is free.
-Indemnity
+
+#### Indemnity
 
 You agree to indemnify and hold harmless Hop Studios for any third-party claims, actions or suits, as well as any related expenses, liabilities, damages, settlements or fees arising from your use or misuse of the Software, or a violation of any terms of this license.
 
