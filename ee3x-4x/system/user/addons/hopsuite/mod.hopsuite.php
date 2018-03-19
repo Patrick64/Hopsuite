@@ -285,7 +285,7 @@ class Hopsuite
 			'reply_url'			=> "",
 			// Specific Facebook variables
 			'shares_count'		=> 0,
-			// Specific Instagram variables
+			// Specific Instagram & Facebook variables
 			'picture_hd'		=> "",
 		);
 		if (array_key_exists("tweet", $post))
@@ -400,6 +400,10 @@ class Hopsuite
 			if (isset($facebook->picture))
 			{
 				$tags['picture']		= $facebook->picture;
+			}
+			if (isset($facebook->full_picture))
+			{
+				$tags['picture_hd']		= $facebook->full_picture;
 			}
 		}
 		elseif (array_key_exists('instagram', $post))

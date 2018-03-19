@@ -188,6 +188,7 @@ class Hopsuite_helper
 									'timestamp' => $data_post->getTimestamp(),
 									'facebook'  => $post
 								);
+
 								// We don't care about how it's added, all posts are sorted at the end of the process
 								$timeline_facebook[] = $post_timeline;
 							}
@@ -359,7 +360,7 @@ class Hopsuite_helper
 		$post_params = array(
 			"format"		=> "json",
 			"limit"			=> $facebook_count,
-			"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,link,from,shares,created_time',
+			"fields"		=> 'comments.limit(1).summary(true),likes.limit(1).summary(true),message,picture,full_picture,link,from,shares,created_time',
 		);
 
 		// See doc about access tokens and API calls https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens

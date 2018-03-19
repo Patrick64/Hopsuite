@@ -70,7 +70,7 @@ Displays a simple list of social posts (`<ul>` -> `<li>` list).
 - `{from}` This will display the Twitter username, the person/page name of Facebook or username of Instagram
 - `{likes_count}` *Facebook & Instagram* This will display the number of likes of the post
 - `{picture}` This is a url to an image if any is provided in the post.
-- `{picture_hd}` *Instagram only* URL to 640x640px picture of the Instagram post
+- `{picture_hd}` *Instagram & Facebook only* URL to 640x640px picture of the Instagram post
 - `{post_url}` Direct link to the post
 - `{profile_picture}` *Twitter & Instagram* This is a url of the avatar of the person who posted
 - `{profile_url}` This will display a URL to the Twitter account, Facebook person or page or Instagram account that posted the social post
