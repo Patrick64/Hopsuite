@@ -92,6 +92,10 @@ Having issues ? Found a bug ? Suggestions ? Contact us at [tech@hopstudios.com](
 
 ## Changelog 
 
+### 1.1.4
+
+* Add picture_hd tag for Facebook posts
+
 ### 1.1.3
 
 * Ready for EE4

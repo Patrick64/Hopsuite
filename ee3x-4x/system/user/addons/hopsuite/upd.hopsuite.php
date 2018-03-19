@@ -42,7 +42,7 @@ class hopsuite_upd
 	{
 		ee()->load->dbforge();
 
-		if (version_compare($current, '1.1.3', '='))
+		if (version_compare($current, '1.1.4', '='))
 		{
 			return FALSE;
 		}
