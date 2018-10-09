@@ -292,13 +292,13 @@ class Hopsuite
 		{
 			$tweet = $post["tweet"];
 			// Avoid error if tweet data isn't correct
-			if (isset($tweet->created_at) && isset($tweet->text))
+			if (isset($tweet->created_at) && isset($tweet->full_text))
 			{
 				$tweet_date = new DateTime($tweet->created_at);
 
 				//Replace shortened urls to full ones
-				$tweet_text = $tweet->text;
-				$tweet_text_url = $tweet->text;
+				$tweet_text = $tweet->full_text;
+				$tweet_text_url = $tweet->full_text;
 				foreach ($tweet->entities->urls as $tweet_url)
 				{
 					$tweet_text = str_replace($tweet_url->url, $tweet_url->expanded_url, $tweet_text);

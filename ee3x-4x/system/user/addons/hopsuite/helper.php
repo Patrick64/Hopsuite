@@ -239,7 +239,8 @@ class Hopsuite_helper
 					$params = array(
 						"screen_name"	=> $twitter_screen_name,
 						"count"			=> $twitter_count,
-						"include_rts"	=> ($twitter_include_rts?'true':'false')
+						"include_rts"	=> ($twitter_include_rts?'true':'false'),
+						"tweet_mode" => "extended"
 					);
 
 					$twitter_api = new TwitterAPIWrapper($twit_settings);
@@ -266,7 +267,8 @@ class Hopsuite_helper
 					$params = array(
 						"q"				=> $twitter_search_query,
 						"count"			=> $twitter_count,
-						"result_type"	=> 'recent'
+						"result_type"	=> 'recent',
+						"tweet_mode" => "extended"
 						// "result_type"	=> 'popular'
 					);
 
