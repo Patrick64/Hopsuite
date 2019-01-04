@@ -238,8 +238,9 @@ class Hopsuite_helper
 				{
 					$params = array(
 						"screen_name"	=> $twitter_screen_name,
-						"count"			=> $twitter_count,
-						"include_rts"	=> ($twitter_include_rts?'true':'false'),
+						"count"			=> 50, //$twitter_count,
+						"include_rts"	=> ($twitter_include_rts?true:false),
+						'exclude_replies' => true,
 						"tweet_mode" => "extended"
 					);
 
@@ -296,12 +297,14 @@ class Hopsuite_helper
 				{
 					foreach ($data as $tweet)
 					{
-						$date_tweet = new DateTime($tweet->created_at);
-						$tweet_timeline = array(
-							'timestamp'	=> $date_tweet->getTimestamp(),
-							'tweet'	 	=> $tweet
-						);
-						$timeline_twitter[] = $tweet_timeline;
+						if (($twitter_include_rts || !$tweet->retweeted) && count($timeline_twitter) < $twitter_count) {
+							$date_tweet = new DateTime($tweet->created_at);
+							$tweet_timeline = array(
+								'timestamp'	=> $date_tweet->getTimestamp(),
+								'tweet'	 	=> $tweet
+							);
+							$timeline_twitter[] = $tweet_timeline;
+						}
 					}
 				}
 			}

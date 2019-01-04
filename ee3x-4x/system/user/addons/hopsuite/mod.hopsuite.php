@@ -299,10 +299,12 @@ class Hopsuite
 				//Replace shortened urls to full ones
 				$tweet_text = $tweet->full_text;
 				$tweet_text_url = $tweet->full_text;
+				$tweet_text_no_url = $tweet->full_text;
 				foreach ($tweet->entities->urls as $tweet_url)
 				{
 					$tweet_text = str_replace($tweet_url->url, $tweet_url->expanded_url, $tweet_text);
 					$tweet_text_url = str_replace($tweet_url->url, '<a href="'.$tweet_url->expanded_url.'">'.$tweet_url->display_url.'</a>', $tweet_text_url);
+					$tweet_text_no_url = str_replace($tweet_url->url, '', $tweet_text_no_url);
 				}
 				//Media are also shortened sometime so we'll change them too
 				if (isset($tweet->entities->media) && is_array($tweet->entities->media))
@@ -312,10 +314,12 @@ class Hopsuite
 					{
 						$tweet_text = str_replace($tweet_media->url, $tweet_media->media_url_https, $tweet_text);
 						$tweet_text_url = str_replace($tweet_media->url, '<a href="'.$tweet_media->expanded_url.'">'.$tweet_media->display_url.'</a>', $tweet_text_url);
+						$tweet_text_no_url = str_replace($tweet_media->url, '', $tweet_text_no_url);
 					}
 				}
 
 				$tags['text']			= $tweet_text;
+				$tags['text_no_url']			= $tweet_text_no_url;
 				//$tags['text_url']	 = preg_replace('!(http|ftp|scp)(s)?:\/\/[a-zA-Z0-9.?%=\-&_/]+!', "<a href=\"\\0\">\\0</a>", $tweet_text);
 				$tags['text_url']		= $tweet_text_url;
 				$tags['date']			= $tweet_date->getTimestamp();
